@@ -1,0 +1,61 @@
+<!-- Страница просмотра техобслуживания, значения из blok1/views.py функция Site_maintenance -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+{% block title %}Техобслуживание{% endblock %}
+
+{% block menu_kab %}
+    {% if user.is_superuser == 1 %}
+       {% include 'navbar_kaba.html' %} <!-- Меню администратора -->
+    {% else %}
+       {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
+    {% endif %}
+{% endblock menu_kab %}
+
+{% block content %}
+
+   <!-- <div class="section-top">   class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Сайт на техобслуживании
+                </h4>
+                <form id="form-orderstable" method="POST">{% csrf_token %}
+                 <table id="orders_table" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Техобслуживание</th>
+                                <th>Создан</th>
+                                <th>Изменен</th>
+                                <th>Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- показываем значения определенные в переменной maintenance функции Site_maintenance_active файла blok1/views.py -->
+                                <tr>
+                                    <td>{{ maintenance.id }}</td>
+                                    <td>{{ maintenance.maintenance }}</td>
+                                    <td>{{ maintenance.created }}</td>
+                                    <td>{{ maintenance.updated }}</td>
+                                    <td>
+                                        <input type="submit" name="check_active" class="btn btn-primary btn-md check_active"  value="активировать" data-item_id="{{maintenance.id}}"/>
+                                        <input type="submit" name="check_deactivate" class="btn btn-danger btn-md check_deactivate"  value="деактивировать" data-item_id="{{maintenance.id}}"/>
+                                    </td>
+                                </tr>
+
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+         </div>
+   <!--  </div> -->
+
+
+{% endblock %}
+
+{% block js_stuff %}
+
+<script type="text/javascript" src="{% static 'js/site_maintenance.js' %}"></script>
+
+
+{% endblock js_stuff %}

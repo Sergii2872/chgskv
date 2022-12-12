@@ -1,0 +1,188 @@
+<!-- Базовый шаблон для всех страниц , navbar и footer -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}ВЖИК ОБМЕН{% endblock %}</title>
+
+    <!-- Для адаптации сайта под смартфон -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap-- Подгружаем стили бутстрап, шрифта roboto -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+
+    <!-- Custom styles Подключение стилей для наших классов(контейнеров)-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Отмена запроса иконки сайта favicon.ico-->
+    <link rel="icon" href="data:,">
+    <!-- Подключаем стили таблицы datatables.net -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.css' %}">
+    <!-- Подключаем стили кнопки print таблицы datatables.net https://www.datatables.net/extensions/buttons/examples/print/simple.html-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/buttons.dataTables.css' %}">
+    <!-- Подключаем стили редактора таблицы datatables.net https://editor.datatables.net/manual/installing/
+    <link rel="stylesheet" type="text/css" href="{% static 'css/editor.dataTables.css' %}">   , не использую платный -->
+    <!-- Подключаем стили select таблицы datatables.net -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/select.dataTables.css' %}">
+    <!-- Подключаем стили фиксирования столбцов таблицы datatables -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fixedColumns.dataTables.css' %}">
+    <!-- Подключаем стили chekbox таблицы datatables.net https://www.datatables.net/extensions/select/examples/initialisation/checkbox
+    <link rel="stylesheet" type="text/css" href="{% static 'css/select.dataTables.css' %}"> -->
+    <!-- Подключаем стили всплывающих инфо окон https://craftpip.github.io/jquery-confirm/ -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-confirm.min.css' %}">
+    <!-- Подключаем стили всплывающих окон картинок https://daruse.ru/lightbox, https://lokeshdhakar.com/projects/lightbox2/ -->
+    <link rel="stylesheet" href="{% static 'css/lightbox.css' %}">
+    <!-- Стили для меню на jQuery
+     https://github.com/vadikom/smartmenus
+     http://vadikom.github.io/smartmenus/src/demo/ -->
+    <!-- SmartMenus core CSS (required) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sm-core-css.css' %}">
+    <!-- "sm-blue" menu theme (optional, you can use your own CSS, too) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sm-blue.css' %}">
+    <!-- "sm-simple" menu theme (optional, you can use your own CSS, too) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sm-simple.css' %}">
+    <!-- стили для библиотеки jQuery UI (progress bar)-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.min.css' %}">
+    <!-- стили input file для выбора и предпросмотра картинки -->
+    <!-- https://www.jqueryscript.net/demo/jQuery-Plugin-To-Beautify-File-Inputs-with-Custom-Styles-Dropify/ -->
+    <!-- https://github.com/JeremyFagis/dropify -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dropify.css' %}">
+
+
+</head>
+<body>
+
+<!--    <div class="wrapper">   стиль из style.css пока убрал-->
+
+        <!-- Информационный верхний блок-->
+        <!-- Помещаем наш размеченный предварительно сайт состоящий из 5 строк(блоков) в контейнер, id присваиваем идентификатор main который описывается в style.css(отступ всего контейнера от верха на 20 пикселей)-->
+        <div class="container-fluid section-top" id="main">
+            <!-- Первая строка(блок) у нас состоит из 4х подблоков равной ширины 12 делим на 4 получаем col-xs-3 -->
+            <div class="row">
+                <div class="col-md-1">
+                    <img src="{% static 'img/zipper.jpg' %}" alt="Скиведа"  id="dvig" class="social1"/>
+                </div>
+                <div class="col-md-3">
+                    <br>
+                    <a href="mailto:zipperobmen@gmail.com" target="_blank"><h5>zipperobmen@gmail.com</h5></a>
+                </div>
+                <div class="col-md-1" id="user">
+                    <form id="form_identification" action="{% url 'Registration' %}">{% csrf_token %}
+                     <br>
+                     {% if request.user.is_authenticated %}
+                          <h6>Пользователь: {{ user.username }}</h6> <!-- Пользователь авторизован. -->
+                     {% else %}
+                          <h6>Пользователь: Гость</h6> <!-- Анонимный пользователь. -->
+                     {% endif %}
+                    </form>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                    График работы сайта круглосуточно.
+                    <br>
+                    Поддержка ежедневно 9:00 — 23:00
+                    <br>
+                    <span style="font-size: 12px; color: #d54e21; font-family: Tahoma, Geneva, sans-serif;">
+                    Заявки требующие ручной обработки оператора, обрабатываются с 10:00 до 23:00!</span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                     <br>
+                     {% include 'navbarreg.html' %}
+                     {% include 'form_vh_reg.html' %}
+                </div>
+
+            </div>
+        </div>
+
+        {% block menu_kab %}
+        {% endblock menu_kab %}
+
+        <div class="wrapper-content">
+
+            {% block content %}
+            {% endblock content %}
+
+        </div>
+
+<!--    </div>   -->
+    <!-- Подключаем информацию для всплывающих инфо окон на jQuery -->
+     {% include 'info.html' %}
+    <!-- Подключаем информацию футера -->
+     {% include 'footer.html' %}
+
+    <!-- Подключаем jQuery -->
+    <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+    <script type="text/javascript" src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-migrate-3.3.2.min.js' %}"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' integrity='sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS' crossorigin='anonymous' %}"></script>
+    <!--  Скрипт для выпадающего меню https://github.com/CWSpear/bootstrap-hover-dropdown -->
+    <script type="text/javascript" src="{% static 'js/bootstrap-hover-dropdown.min.js' %}"></script>
+    <!-- Скрипт для формы регистрации -->
+    <script type="text/javascript" src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+    <!-- Скрипт формы регистрации -->
+    <script type="text/javascript" src="{% static 'js/scripts_reg.js' %}"></script>
+    <!-- Скрипт форм изменения имени,фамилии,адреса,даты рождения или пароля -->
+    <script type="text/javascript" src="{% static 'js/scripts_izreg.js' %}"></script>
+    <!-- Скрипт выпадающего информационного окна -->
+    <script type="text/javascript" src="{% static 'js/wind_pop.js' %}"></script>
+    <!-- Подключаем скрипт таблицы datatables.net -->
+    <script type="text/javascript" src="{% static 'js/jquery.dataTables.js' %}"></script>
+    <!-- Подключаем скрипт кнопки принт таблицы datatables.net https://www.datatables.net/extensions/buttons/examples/print/simple.html-->
+    <script type="text/javascript" src="{% static 'js/dataTables.buttons.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/buttons.print.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/dataTables.fixedColumns.js' %}"></script>
+    <!-- Редактор таблицы datatables.net https://editor.datatables.net/manual/installing/ , не использую платный
+    <script type="text/javascript" src="{% static 'js/dataTables.editor.js' %}"></script> -->
+    <!-- Select таблицы datatables.net -->
+    <script type="text/javascript" src="{% static 'js/dataTables.select.js' %}"></script>
+    <!-- https://datatables.net/extensions/buttons/examples/initialisation/simple.html -->
+    <script type="text/javascript" src="{% static 'js/buttons.html5.js' %}"></script>
+    <!-- https://www.cdnpkg.com/jszip/file/jszip.min.js/# для datatables -->
+    <script type="text/javascript" src="{% static 'js/jszip.min.js' %}"></script>
+    <!-- https://www.cdnpkg.com/pdfmake/file/pdfmake.min.js/ для datatables экспорт pdf-->
+    <!-- https://www.cdnpkg.com/pdfmake/file/pdfmake.min.js.map/ скачать и поместить в js -->
+    <script type="text/javascript" src="{% static 'js/pdfmake.min.js' %}"></script>
+    <!-- https://www.cdnpkg.com/pdfmake/file/vfs_fonts.js/ для datatables экспорт pdf-->
+    <script type="text/javascript" src="{% static 'js/vfs_fonts.js' %}"></script>
+    <!-- https://www.datatables.net/extensions/select/examples/initialisation/checkbox для datatables chekbox
+    <script type="text/javascript" src="{% static 'js/select.dataTables.js' %}"></script> -->
+    <!-- Подключаем скрипт всплывающих инфо окон https://craftpip.github.io/jquery-confirm/ -->
+    <script type="text/javascript" src="{% static 'js/jquery-confirm.min.js' %}"></script>
+    <!-- Подключаем скрипт всплывающих окон картинок https://daruse.ru/lightbox, https://lokeshdhakar.com/projects/lightbox2/ -->
+    <script type="text/javascript" src="{% static 'js/lightbox.js' %}"></script>
+    <!-- Подключаем скрипт для меню на jQuery https://www.internet-technologies.ru/articles/obzor-30-luchshih-besplatnyh-jquery-menyu-navigacii.html
+     https://github.com/vadikom/smartmenus
+     http://vadikom.github.io/smartmenus/src/demo/ -->
+    <!-- SmartMenus jQuery plugin -->
+    <script type="text/javascript" src="{% static 'js/jquery.smartmenus.js' %}"></script>
+    <!-- Подключаем скрипт для активации меню на jQuery -->
+    <script type="text/javascript" src="{% static 'js/smartmenus.js' %}"></script>
+    <!-- Подключаем скрипт для выбора списка продаваемых валют -->
+    <script type="text/javascript" src="{% static 'js/list_currencies_sell.js' %}"></script>
+    <!-- Подключаем скрипт библиотеки виджетов jQuery UI (progress bar)-->
+    <!-- https://jqueryui.com/download/ -->
+    <!-- https://professorweb.ru/my/javascript/jquery/level4/4_3.php -->
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <!-- чат Jivo chat,https://app.jivo.ru/chat/inbox, 20061983_Vkk -->
+    <script src="//code.jivo.ru/widget/JjMRDODe7e" async></script>
+    <!-- Подключаем скрипт input file для выбора и предпросмотра картинки -->
+    <!-- https://www.jqueryscript.net/demo/jQuery-Plugin-To-Beautify-File-Inputs-with-Custom-Styles-Dropify/ -->
+    <!-- https://github.com/JeremyFagis/dropify -->
+    <script type="text/javascript" src="{% static 'js/dropify.js' %}"></script>
+
+
+
+
+    {% block js_stuff %}
+    {% endblock js_stuff %}
+
+</body>
+</html>

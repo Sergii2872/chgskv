@@ -1,0 +1,47 @@
+<!-- Содержание форм входа и регистрации(выпадающие) -->
+{% load static %}
+<!-- Формы выпадающих меню регистрации jquery  class="info"/-->
+
+<div class="loginform"  id="Login_form">
+  <img src="{% static 'img/result.png' %}" id="login">
+  <form  id="form_authentication" action="{% url 'Registration' %}" method="post">{% csrf_token %}
+    <div>
+      <div class="form-item">
+        <label for="edit-name">Логин:</label>
+        <input type="text" class="form-text required" value="" size="15" id="edit-name" name="name" maxlength="60" autocomplete="off">
+      </div>
+      <div class="form-item">
+        <label for="edit-pass">Пароль:</label>
+        <input type="password" class="form-text required" size="15" maxlength="60" id="edit-pass" name="pass" autocomplete="off">
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="loginform" id="SignupForm">
+  <img src="{% static 'img/submit.png' %}" id="submit">
+  <form id="form_registration" action="{% url 'Registration' %}" method="post">{% csrf_token %}
+    <div>
+      <div class="form-item">
+        <label for="edit-mail">Email:</label>
+        <input type="text" class="form-text required" value="" size="15" id="edit-mail" name="name" maxlength="60" autocomplete="off">
+      </div>
+      <div class="form-item">
+        <label for="edit-namer">Логин:</label>
+        <input type="text" class="form-text required" value="" size="15" id="edit-namer" name="name" maxlength="60" autocomplete="off">
+      </div>
+      <div class="form-item">
+        <label for="edit-passr">Пароль:</label>
+        <input type="password" class="form-text required" size="15" maxlength="60" id="edit-passr" name="pass" autocomplete="off">
+      </div>
+      <div class="form-item">
+        <label for="edit-passr2">Пароль:<br>(подтвердить)</label>
+        <input type="password" class="form-text required" size="15" maxlength="60" id="edit-passr2" name="pass" autocomplete="off">
+      </div>
+      <div class="form-item">
+        <label for="edit-phone">Телефон:</label>
+        <input type="text" class="form-text required" size="15" maxlength="60" id="edit-phone" name="pass" autocomplete="off">
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,230 @@
+<!-- Страница обмена клиентом выбранных валют, значения из blok1/views.py функция form_exchange -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+
+
+{% block content %}
+    <title>{% block title %}Обмен {{currence_by.currency}} на {{currence_sell.currency}}{% endblock %}</title>
+    {% include 'navbar.html' %}
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Обмен {{currence_by.currency}} на {{currence_sell.currency}}
+                </h4>
+            </div>
+         </div>
+    </div>
+
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h3 class="text-left txt_style1">Внимание!</h3>
+                <h4 class="text-left txt_style2">
+                {% if currencypair_exchange_rate.market_exchange_id == 3 %} <!-- 3 пара фиатных валют -->
+                    Чтобы обменять {{currence_by.currency}} на {{currence_sell.currency}} нужно выполнить несколько шагов:<br>
+                    Оформите заявку, указав количество {{currence_by.currency}} на обмен, выберете соответствующие вашим картам банк и укажите Ваш e-mail.<br>
+                    Ознакомьтесь с условиями договора на оказание услуг обмена, если вы принимаете их, поставьте галочку в соответствующем поле.<br>
+                    Создайте заявку.<br>
+                {% else %}
+                    Чтобы обменять {{currence_by.currency}} на {{currence_sell.currency}} нужно выполнить несколько шагов:<br>
+                    Оформите заявку, указав количество {{currence_by.currency}} на обмен, кошелек {{currence_sell.currency}} и e-mail.<br>
+                    Ознакомьтесь с условиями договора на оказание услуг обмена, если вы принимаете их, поставьте галочку в соответствующем поле.<br>
+                    Создайте заявку.<br>
+                    После отправки {{currence_by.currency}} дождитесь подтверждения сети.
+                {% endif %}
+
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+          <!-- onsubmit="return validateForm()" функция проверки введенных данных в exchange_currency.js по нажатию кнопки формы "обменять" -->
+          <form  class="form_exchange_currency" name="form_exchange_currency" action="{% url 'Exchange_currency_result' currency_by_id=currence_by.id currency_sell_id=currence_sell.id %}" method="post" onsubmit="return validateForm()">{% csrf_token %}
+            <div class="row">
+                <h3 class="text-left txt_style3">Отдаете:</h3>
+                <h5 class="text-left txt_style2" id="kurs">Курс обмена: 1 {{currence_sell.currency}} ➯ {{exchange_kurs_sell}} {{currence_by.currency}}</h5>
+                <h5 class="text-left txt_style2" id="kurs_inverse">Курс обмена: 1 {{currence_by.currency}} ➯ {{exchange_kurs_sell_inverse}} {{currence_sell.currency}}</h5>
+
+                <div class="form-group">
+                    <div class="col-lg-8">
+                        <!-- по onchange="Exchange_currency.call(this, event, {{currence_sell.id}}) выполняем функцию и передаем id покупаемой валюты из select и id продаваемой валюты currency_sell.id скрипт exchange_currency.js -->
+                        <select class="chosen" onchange="Exchange_currency_select_by.call(this, event, {{currence_sell.id}})">
+                                {% for item in name_currences_purchases_trades %}
+                                    {% if item.id == currence_by.id %}
+                                        <option value="{{ item.id }}" data-img-src="{{ item.image_currency.url }}" selected="selected">{{ item.currency }}</option>
+                                    {% else %}
+                                        <option value="{{ item.id }}" data-img-src="{{ item.image_currency.url }}">{{ item.currency }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                        </select>
+                        <br><br>
+                        {% if currencypair_exchange_rate.market_exchange_id == 3 %} <!-- 3 пара фиатных валют -->
+                            <select class="chosen" name="name_bank_buy" onchange="Placeholder_name_bank_buy.call(this, event)">
+                                {% for item in wallet_bank_buy %}
+                                    <option value="{{ item.name_bank }}" data-img-src="{{ item.image_bank.url }}">{{ item.name_bank }}</option>
+                                {% endfor %}
+                            </select>
+                            <br><br>
+                        {% endif %}
+                        <div class="col-md-6">
+                            {% if currencypair_exchange_rate.market_exchange_id == 3 %} <!-- 3 пара принадлежит к маркету фиатных валют -->
+                                <!-- <label for="placeholder_bank_name_buy">Credit Card Number: XXXX XXXX XXXX XXXX</label> -->
+                                <!-- не применяю  inputmode="numeric" pattern="[0-9\s]{16,19}" autocomplete="cc-number" maxlength="19", формат из cleave.js по class="input-element-buy" -->
+                                <p>Credit card (<span class="type-buy">unknown</span>): </p>
+                                <input type="tel" name="wallet_by" id="placeholder_bank_name_buy" class="input-element-buy form-control" placeholder="" value="" data-name_bank_buy="{{ placeholder_bank_buy.name_bank }}">
+                            {% else %}
+                                С кошелька<span class="req">*</span>:
+                                <input type="text" name="wallet_by" id="wallet_by" minlength="3" maxlength="80" class="form-control" autocomplete="off" placeholder="" value="">
+                            {% endif %}
+                            <span id="error_wallet_by"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <p class="text-danger">
+                            <span>min.: {{currencypair_exchange_rate.min_buy}} {{currence_by.currency}}</span>
+                            <br>
+                            <span>max.: {{currencypair_exchange_rate.max_buy}} {{currence_by.currency}}</span>
+                        </p>
+                        <div class="col-md-8">
+                            Сумма<span class="req">*</span>:
+                           <!-- onchange="Input_result функция jquery в exchange_currency.js , функция для вычисления суммы валюты по курсу -->
+                            <input id="sum_by" name="sum_by" type="number" step=0.00001 min={{currencypair_exchange_rate.min_buy}} max={{currencypair_exchange_rate.max_buy}} class="form-control" autocomplete="off" placeholder="0.00" value="" onchange="Input_result.call(this, event, {{currencypair_exchange_rate.kurs_sell}})">
+                            <span class="error_sum"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr-shelf">
+                <h3 class="text-left txt_style3">Получаете:</h3>
+                <div class="form-group">
+                    <div class="col-lg-8">
+                        <select class="chosen" onchange="Exchange_currency_select_sell.call(this, event, {{currence_by.id}})">
+                                {% for item in name_currences_sells_img %}
+                                    {% if item.id == currence_sell.id %}
+                                        <option value="{{ item.id }}" data-img-src="{{ item.image_currency.url }}" selected="selected">{{ item.currency }}</option>
+                                    {% else %}
+                                        <option value="{{ item.id }}" data-img-src="{{ item.image_currency.url }}">{{ item.currency }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                        </select>
+                        <br><br>
+                        {% if currencypair_exchange_rate.market_exchange_id == 3 %} <!-- 3 пара фиатных валют -->
+                            <select class="chosen" name="name_bank_sell" onchange="Placeholder_name_bank_sell.call(this, event)">
+                                {% for item in wallet_bank_sell %}
+                                    <option value="{{ item.name_bank }}" data-img-src="{{ item.image_bank.url }}">{{ item.name_bank }}</option>
+                                {% endfor %}
+                            </select>
+                            <br><br>
+                        {% endif %}
+                        <div class="col-md-6">
+                            {% if currencypair_exchange_rate.market_exchange_id == 3 %} <!-- 3 пара фиатных валют -->
+                                <!-- <label for="placeholder_bank_name_sell">Credit Card Number: XXXX XXXX XXXX XXXX</label> -->
+                                <!-- не применяю  inputmode="numeric" pattern="[0-9\s]{16,19}" autocomplete="cc-number" maxlength="19", формат из cleave.js по class="input-element-sell" -->
+                                <p>Credit card (<span class="type-sell">unknown</span>): </p>
+                                <input type="tel" name="wallet_sell" id="placeholder_bank_name_sell" class="input-element-sell form-control" placeholder="" value="" data-name_bank_sell="{{ placeholder_bank_sell.name_bank }}">
+                            {% else %}
+                                На счет<span class="req">*</span>:
+                                <input type="text" name="wallet_sell" id="wallet_sell" minlength="3" maxlength="80" class="form-control" autocomplete="off" placeholder="" value="">
+                            {% endif %}
+                            <span id="error_wallet_sell"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <p class="text-danger">
+                            <span>min.: {{min_sell}} {{currence_sell.currency}}</span>
+                            <br>
+                            <span>max.: {{max_sell}} {{currence_sell.currency}}</span>
+                        </p>
+                        <div class="col-md-8">
+                            Сумма<span class="req">*</span>:
+                            <!-- onchange="Input_sum функция jquery в exchange_currency.js -->
+                            <input id="result" name="sum_sell" type="number" step="any" class="form-control" autocomplete="off" placeholder="0.00" value="" onchange="Input_sum.call(this, event, {{currencypair_exchange_rate.kurs_sell}})">
+                            <span class="error_sum"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr-shelf">
+                <div class="form-group">
+                    <h3 class="text-left txt_style3">Личные данные:</h3>
+                    <div class="col-md-4">
+                        E-mail<span class="req">*</span>:
+                        <input type="email" name="email" id="email" minlength="3" maxlength="64" class="form-control" autocomplete="on" placeholder="" value="">
+                        <span id="error_email"></span>
+                    </div>
+                </div>
+            </div>
+           <!--</div>-->
+            <br>
+
+            <!-- Передаем скрытым input значение принадлежности к фиатным валютам для функции validateForm() -->
+            <input type="hidden" name="market" value="{{ currencypair_exchange_rate.market_exchange_id }}">
+
+            <div class="row">
+                <div class="col-md-4">
+                <div class="form-check">
+                  <input class="form-check-input" name="notify" type="checkbox" value="1" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Запомнить данные
+                  </label>
+                </div>
+                <div class="text-left">
+                    <button class="btn btn-primary btn-md section-top">Обменять</button>
+                </div>
+                </div>
+            </div>
+          </form>
+        </div>
+    </div>
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h5 class="text-left txt_style2">Обмен {{currence_by.currency}} на {{currence_sell.currency}}</h5>
+                <h6 class="text-left txt_style1">ВНИМАНИЕ</h6>
+                <h5 class="text-left txt_style2">
+                {% if currencypair_exchange_rate.market_exchange_id == 3 %} <!-- 3 пара фиатных валют -->
+                    Выполнение заявки на обмен {{currence_by.currency}} на {{currence_sell.currency}}  происходит в ручном режиме(Р2Р) <br>
+                    После получения перевода с Вашей стороны, мы переведем сумму к получению на указанные Вами реквизиты<br>
+                {% else %}
+                    Выполнение заявки на обмен {{currence_by.currency}} на {{currence_sell.currency}}  происходит в ручном режиме и занимает обработку в течении 5-30 минут,<br>
+                    в зависимости от загруженности операторов.<br>
+                    Все заявки, по которым криптовалюта поступила в течение с 9:00 до 00:00, выплачиваются в день создания заявки.<br>
+                    Если в течении 15 минут после оформления заявки ваш перевод не получил подтверждения по данным сети,<br>
+                    а так же при резком колебании курса (более 0.25%), администрация обменника оставляет за собой право вернуть перевод обратно отправителю.<br>
+                    Курс фиксируется по заявке на момент подтверждения в сети если за это время курс не стал ниже 0.25% от созданного в заявке.<br>
+                {% endif %}
+                </h5>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js_stuff %}
+
+<!-- Подключаем скрипт для вставки картинки img в select , не использую-->
+<!-- https://codepen.io/antonandoff/pen/PmQvBz -->
+
+<!-- Подключаем скрипты для select с картинкой chosen.jquery.js, ImageSelect.jquery.js-->
+<!-- https://websemantics.github.io/Image-Select/?ref=https://githubhelp.com -->
+<!-- варианты select https://snipp.ru/jquery/select-search -->
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/chosen.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/ImageSelect.css' %}">
+<script type="text/javascript" src="{% static 'js/chosen.jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/ImageSelect.jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/select_currency.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/exchange_currency.js' %}"></script>
+<!-- Подключаем скрипт валидации кредитных карт
+// https://www.codefixup.com/credit-card-validation-jquery/ -->
+<script type="text/javascript" src="{% static 'js/jquery.creditCardValidator.js' %}"></script>
+<!-- Подключаем скрипт библиотеки для работы с формой(для ввода номера кредитной карты)
+// https://nosir.github.io/cleave.js/ -->
+<script type="text/javascript" src="{% static 'js/cleave.js' %}"></script>
+
+{% endblock js_stuff %}

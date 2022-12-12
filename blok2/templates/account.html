@@ -1,0 +1,20 @@
+<!-- Страница кабинета администратора или пользователя(просмотр,редактирование,удаление учетных данных, справочников)-->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css -->
+
+
+{% block content %}
+<!--    <div class="wrapper-content"> -->
+        {% if user.is_superuser == 1 %}
+              {% include 'navbar_kaba.html' %} <!-- Меню администратора -->
+        {% else %}
+              {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
+        {% endif %}
+
+<!--    </div>  -->
+
+    <div class="section-top">
+        <img src="{% static 'img/fon1.jpg' %}" class="img-responsive img-rounded">
+    </div>
+
+{% endblock %}

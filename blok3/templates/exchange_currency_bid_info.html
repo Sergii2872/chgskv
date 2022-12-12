@@ -1,0 +1,139 @@
+<!-- Страница заявки с номером ID для обмена клиентом выбранных валют и суммы перед оплатой с обновлением страницы, значения из blok1/views.py функция Exchange_currency_bid -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+
+
+{% block content %}
+    <title>{% block title %}Заявка ID {{request_id}}{% endblock %}</title>
+    {% include 'navbar.html' %}
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Заявка ID {{request_id}} Обмен {{exchange.name_currency_buy_currency}} на {{exchange.name_currency_sell_currency}}
+                </h4>
+            </div>
+         </div>
+    </div>
+
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h5 class="text-left txt_style1">Внимание!</h5>
+                <h5 class="text-left txt_style2">
+                {% if market == 3 %} <!-- 3 пара фиатных валют -->
+                    1.Перейдите в приложение {{name_bank_buy}}<br>
+                    2.Выполните перевод на карту {{ exchange.wallet_fact }}
+                {% else %}
+                    После отправки {{exchange.name_currency_buy_currency}} дождитесь подтверждения сети.
+                {% endif %}
+                </h5>
+            </div>
+        </div>
+    </div>
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+          <form  class="form_exchange_currency_pay" name="form_exchange_currency_pay" action="{% url 'Exchange_currency_pay' request_id=request_id %}" method="post">{% csrf_token %}
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <h4>Сумма платежа: {{exchange.sum_currency_buy|floatformat:2}} {{exchange.name_currency_buy_currency}}</h4>
+                        <h4>Со счета: {{exchange.wallet_currency_buy}}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                         <h4>Сумма к получению: {{exchange.sum_currency_sell|floatformat:2}} {{exchange.name_currency_sell_currency}}</h4>
+                         <h4>На счет: {{exchange.wallet_currency_sell}}</h4>
+                    </div>
+                </div>
+            </div>
+            <hr class="hr-horizontal-gradient">
+            <div class="row">
+                <div class="form-group">
+                    <h5 class="text-left txt_style1">Пожалуйста, будьте внимательны!</h5>
+                    <h5 class="text-left txt_style2">Все поля должны быть заполнены в точном соответствии с инструкцией. В противном случае, платеж может не пройти.</h5>
+                </div>
+            </div>
+            <hr class="hr-horizontal-gradient">
+            <div class="row">
+                <div class="form-group">
+                    <h5 class="text-left txt_style2" id="info_time">Время изменения статуса: {{exchange.updated|date:'d.m.Y'}}, {{exchange.updated|time:'H:i'}}</h5>
+                    {% if exchange.status == 1 %}
+                        <h5 class="text-left txt_style2" id="info_status">Принята, ожидает оплаты клиентом</h5>
+                    {% endif %}
+                    {% if exchange.status == 0 %}
+                        <h5 class="text-left txt_style1">Заявка удалена</h5>
+                    {% endif %}
+                    {% if exchange.status == 2 %}
+                        <h5 class="text-left txt_style3">Заявка исполнена</h5>
+                    {% endif %}
+                </div>
+            </div>
+           <!--</div>-->
+            <br>
+            <div class="row">
+                <div class="col-md-4" id="button">
+                    {% if exchange.status == 1 %}
+                        <input type="submit" name="request_del" id="request_del" class="btn btn-primary btn-md section-top" value="Отменить заявку" data-request_id="{{request_id}}">
+                        <input type="submit" name="request_by" id="request_by" class="btn btn-primary btn-md section-top" value="Перейти к оплате">
+                        <!-- Передаем скрытыми input значения переменных в функцию Exchange_currency_pay blok1/views.py -->
+                        <input type="hidden" name="wallet_fact" value="{{ exchange.wallet_fact }}">
+                        <input type="hidden" name="name_currency_buy" value="{{ exchange.name_currency_buy_currency }}">
+                        <input type="hidden" name="name_currency_sell" value="{{ exchange.name_currency_sell_currency }}">
+                        <input type="hidden" name="sum_currency_buy" value="{{ exchange.sum_currency_buy }}">
+                        <input type="hidden" name="request_id" value="{{ request_id }}">
+                        <input type="hidden" name="name_bank_buy" value="{{ name_bank_buy }}">
+                        <input type="hidden" name="market" value="{{ market }}">
+
+                    {% endif %}
+                </div>
+            </div>
+          </form>
+          <form  class="form_exchange_currency_bid_info" name="form_exchange_currency_bid_info" action="{% url 'Exchange_currency_bid_info' request_id=request_id market=market name_bank_buy=name_bank_buy %}" method="post">{% csrf_token %}
+              <div class="row">
+                  <div class="col-md-4" id="exit_update">
+                      {% if exchange.status == 1 %}
+                          <input type="submit" name="request_del" id="enable_update" class="btn btn-primary btn-md section-top" value="Включить обновление" data-request_id="{{request_id}}" data-market="{{market}}" data-name_bank_buy="{{name_bank_buy}}">
+                      {% endif %}
+                  </div>
+              </div>
+          </form>
+
+            <!-- прогресс бар библиотеки jquery ui, подключена в base.html -->
+            <div id="progressDiv"></div>
+
+        </div>
+    </div>
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h5 class="text-left txt_style2">Обмен {{exchange.name_currency_buy_currency}} на {{exchange.name_currency_sell_currency}}</h5>
+                <h6 class="text-left txt_style1">ВНИМАНИЕ</h6>
+                <h5 class="text-left txt_style2">
+                {% if market == 3 %} <!-- 3 пара фиатных валют -->
+                    Выполнение заявки на обмен {{currence_by.currency}} на {{currence_sell.currency}}  происходит в ручном режиме(Р2Р) <br>
+                    После получения перевода с Вашей стороны, мы переведем сумму к получению на указанные Вами реквизиты<br>
+                {% else %}
+                    Выполнение заявки на обмен {{exchange.name_currency_buy_currency}} на {{exchange.name_currency_sell_currency}}  происходит в ручном режиме и занимает обработку в течении 5-30 минут,<br>
+                    в зависимости от загруженности операторов.<br>
+                    Все заявки, по которым криптовалюта поступила в течение с 9:00 до 23:00, выплачиваются в день создания заявки.<br>
+                {% endif %}
+                </h5>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js_stuff %}
+
+
+<script type="text/javascript" src="{% static 'js/exchange_result.js' %}"></script>
+
+
+
+{% endblock js_stuff %}

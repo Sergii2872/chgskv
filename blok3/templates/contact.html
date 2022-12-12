@@ -1,0 +1,70 @@
+<!-- Правила -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+
+
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="nesolestag-enadenud">
+                              <h3 style="text-align:center;">Контакты</h3>
+
+                              <!--<div class="ico-wrap"> <i class="fa fa-map-marker ico-contact"></i>
+                              </div>
+                              <div class="meanous-andscoev">
+                              <h4 class="aio-icon-title">Юридический адрес:</h4>
+                              <div class="aio-icon-description">
+                              3486452, г. , ул. ,
+                              <br>дом , , Кабинет </div>
+                              </div>
+
+                              <span class="kesednsoled"></span> -->
+
+                              <div class="ico-wrap"> <i class="fa fa-clock-o ico-contact"></i>
+                              </div>
+                              <div class="meanous-andscoev">
+                              <h4 class="aio-icon-title">График работы:</h4>
+                              <div class="aio-icon-description">
+                              пн.-вс. с 9:00 до 23:00
+                              <br>Без выходных</div>
+                              </div>
+
+                              <span class="kesednsoled"></span>
+
+                              <div class="ico-wrap">
+                              <i class="fa fa-envelope ico-contact"></i>
+                              </div>
+                              <div class="meanous-andscoev">
+                              <h4 class="aio-icon-title">Электронная почта:</h4>
+                              <div class="aio-icon-description">
+                              zipperobmen@gmail.com
+                              </div>
+                              </div>
+
+                              <span class="kesednsoled"></span>
+
+                              <!--<div class="ico-wrap">
+                              <i class="fa fa-phone ico-contact"></i>
+                              </div>
+                              <div class="meanous-andscoev">
+                              <h4 class="aio-icon-title">Связь по телефону:</h4>
+                              <div class="aio-icon-description">
+                              8 (999) 999-99-99
+                              <br>8 (888) 888-88-88</div>
+                              </div>
+
+                              <span class="kesednsoled"></span> -->
+
+                            </div>
+
+                        </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

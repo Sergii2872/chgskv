@@ -1,0 +1,73 @@
+<!-- Страница результата загрузки администратором криптовалют с биржи Poloniex, функция Load_Poloniex_Currencies из blok4/views.py -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+{% block title %}Загрузка криптовалют биржи Poloniex{% endblock %}
+
+{% block menu_kab %}
+    {% if user.is_superuser == 1 %}
+       {% include 'navbar_kaba.html' %} <!-- Меню администратора -->
+    {% else %}
+       {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
+    {% endif %}
+{% endblock menu_kab %}
+
+{% block content %}
+
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Результат загрузки криптовалют биржи Poloniex
+                </h4>
+
+                        <!-- celery progress bar , инициализируется скриптом ниже, показывает результат
+                        выполнения цикла функции my_task в blok4/views.py -->
+                        <div class='progress-wrapper'>
+                          <div id='progress-bar' class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%;">&nbsp;</div>
+                        </div>
+                        <div id="progress-bar-message">Ожидайте! Идет загрузка криптовалют Poloniex...</div>
+                        <!-- celery progress bar , отображение результата прописанного в скрипте
+                        возвращаемого словаря данных функции my_task в blok4/views.py-->
+                        <div id="celery-result"></div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js_stuff %}
+
+
+<!-- для работы  celery progress bar должен быть запущен redis-server d:\progr\Redis-x64-3.2.100 -->
+<!-- для работы  celery progress bar должен быть настроен celery:  -->
+<!-- файл celery.py в корневой директории проекта -->
+<!-- в settings.py настройки сервера REDIS и констант CELERY -->
+<!-- urls.py в корневой директории прописываем путь для celery progress bar re_path('celery-progress/', include('celery_progress.urls')), -->
+<!-- celery запускаем в отдельном окне терминала командой celery -A chgskv worker -l info -P gevent -->
+<!-- Пример progress bar https://github.com/PrettyPrinted/youtube_video_code/tree/master/2020/06/24/How%20to%20Create%20a%20Celery%20Task%20Progress%20Bar%20in%20Django/djangoprogressbar/progress -->
+<!-- Подключаем скрипт celery progress bar https://github.com/czue/celery-progress -->
+<script src="{% static 'celery_progress/celery_progress.js' %}"></script>
+
+<script>
+    // инициализация скрипта progress bar celery
+    // https://github.com/czue/celery-progress
+    var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+
+      function customResult(resultElement, result) {
+        $( resultElement ).append(
+           $('<p>').html('<div>Результат загрузки :</div><div>Новых криптовалют: ' + result.result_add_currency_poloniex +
+                           '</div><div>Вновь активировано криптовалют: ' + result.result_active_currency_poloniex +
+                           '</div><div>Удалено криптовалют: ' + result.result_delete_currency_poloniex +
+                           '</div>')
+        );
+      }
+
+
+      CeleryProgressBar.initProgressBar(progressUrl, {
+            onResult: customResult,
+      })
+</script>
+
+{% endblock js_stuff %}
+

@@ -1,0 +1,80 @@
+<!-- Страница заявки с номером ID для обмена клиентом выбранных валют и суммы перед оплатой с обновлением страницы, значения из blok1/views.py функция Exchange_currency_bid -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+{% block title %}Заявки(операции){% endblock %}
+
+{% block menu_kab %}
+    {% if user.is_superuser == 1 %}
+       {% include 'navbar_kaba.html' %} <!-- Меню администратора -->
+    {% else %}
+       {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
+    {% endif %}
+{% endblock menu_kab %}
+
+{% block content %}
+
+   <!-- <div class="section-top">   class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Заявки(операции)
+                </h4>
+                <form id="form-orderstable" method="POST">{% csrf_token %}
+                 <table id="orders_table" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>продали валюту</th>
+                                <th>сумма продажи</th>
+                                <th>кошелек(счет) отдаете</th>
+                                <th>купили валюту</th>
+                                <th>сумма покупки</th>
+                                <th>кошелек(счет) получаете</th>
+                                <th>курс покупки</th>
+                                <th>кошелек(счет) оплата</th>
+                                <th>статус</th>
+                                <th>создана</th>
+                                <th>изменена</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- показываем заказы определенные в переменной exchange функции OrderProcessing файла blok4/views.py -->
+                            {% for item in exchange_requests %}
+                                <tr>
+                                    <td>{{ item.name_currency_buy_currency }}</td>
+                                    <td>{{ item.sum_currency_buy }}</td>
+                                    <td>{{ item.wallet_currency_buy }}</td>
+                                    <td>{{ item.name_currency_sell_currency }}</td>
+                                    <td>{{ item.sum_currency_sell }}</td>
+                                    <td>{{ item.wallet_currency_sell }}</td>
+                                    <td>{{ item.kurs_sell }}</td>
+                                    <td>{{ item.wallet_fact }}</td>
+                                    {% if item.status == 0 %}
+                                        <td>Заявка удалена</td>
+                                    {% endif %}
+                                    {% if item.status == 1 %}
+                                        <td>Заявка ожидает оплаты</td>
+                                    {% endif %}
+                                    {% if item.status == 2 %}
+                                        <td>Заявка исполнена</td>
+                                    {% endif %}
+                                    <td>{{ item.created }}</td>
+                                    <td>{{ item.updated }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+         </div>
+   <!--  </div> -->
+
+
+{% endblock %}
+
+{% block js_stuff %}
+
+<script type="text/javascript" src="{% static 'js/exchange_operations_client.js' %}"></script>
+
+
+{% endblock js_stuff %}

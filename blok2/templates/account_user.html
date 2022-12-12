@@ -1,0 +1,81 @@
+<!-- Страница для просмотра,редактирования учетных данных(Имя,Фамилия,Адрес,Дата рождения) вызываемая из navbar_kab.html или navbar_kaba.html -->
+<!-- вызов страницы прописан в urls.py , обработка формы(forms.py) прописана в views.py-->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css -->
+{% block title %}Учетные данные{% endblock %}
+
+{% block content %}
+{% if user.is_superuser == 1 %}
+   {% include 'navbar_kaba.html' %} <!-- Меню администратора -->
+{% else %}
+   {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
+{% endif %}
+   <div class="container section-top">
+        <div class="row">
+            <div class="col-md-10 col-lg-offset-1"> <!-- количество колонок-->
+             <br><h3 class="text-center">Учетные данные</h3><br>
+                    <!-- передаем в views.py  в функцию Account_user форму ContactForm метод post, т.к. метод post то обязательно передаем csrf_token -->
+                    <!-- csrf_token(передается в views.py) нужен django чтобы делать post запрос и проверять что запрос пришел именно с нашей страницы а не сторонний -->
+                    <form class="form-horizontal" id=form_auth action="{% url 'Account_user' %}" method="post">{% csrf_token %}
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label>Имя</label><span id="fn"> {{ user.first_name }}</span>
+                                    <!-- form.first_name.errors глобальный тег проверки правильности ввода имени в поле имя -->
+                                    <span class="form-error">{{ form.first_name.errors }}</span>
+                                    <!-- form.first_name определяем в файле forms.py -->
+                                    <input type="text" name="{{ form.first_name.html_name }}" class="form-control" id="fname"
+                                        value="{{ request.POST.first_name }}"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <!-- Присваиваем id="ln" для того чтобы в scripts_izreg.js менять имя при изменении через ajax -->
+                                    <label>Фамилия</label><span id="ln"> {{ user.last_name }}</span>
+                                    <!-- form.last_name.errors глобальный тег проверки правильности ввода фамилии в поле фамилия -->
+                                    <span class="form-error">{{ form.last_name.errors }}</span>
+                                    <!-- form.last_name определяем в файле forms.py -->
+                                    <input type="text" name="{{ form.last_name.html_name }}" class="form-control" id="lname"
+                                        value="{{ request.POST.last_name }}"
+                                    >
+                                </div>
+                            </div>
+                            <!--
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label>Адрес</label><span id="lc"> {{ user.profile.location }}</span>
+                                    <span class="form-error">{{ form.location.errors }}</span>
+                                    <input type="text" name="{{ form.location.html_name }}" class="form-control" id="locat"
+                                        value="{{ request.POST.location }}"
+                                    >
+                                </div>
+                            </div>
+                            -->
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label>Дата рождения</label><span id="bd"> {{ user.profile.birth_date | date:"d-m-Y" }}</span>
+                                    <span class="form-error">{{ form.birth_date.errors }}</span>
+                                    <input type="date" name="{{ form.birth_date.html_name }}" class="form-control" id="bdate"
+                                        value="{{ request.POST.birth_date }}"
+                                    >
+                                </div>
+                            </div>
+
+                        <hr>
+                        <!-- type submit выполнение по событию -->
+                        <!-- По id="auth_user" в scripts_izreg.js выполняется функция userIzm изменения учетных данных -->
+                        <!-- Стиль Кнопки меняем на закругленный в обьеме и отступами  section-top в style.css -->
+                        <div class="text-right">
+                            <button type="submit" id="auth_user" class="btn btn-primary btn-md section-top">Изменить</button>
+                        </div>
+
+                    </form>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+

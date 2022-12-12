@@ -1,0 +1,140 @@
+<!-- Страница подтверждения заявки для обмена клиентом выбранных валют и суммы, значения из blok1/views.py функция Exchange_currency_result -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+
+
+{% block content %}
+    <title>{% block title %}Обмен {{currence_by.currency}} на {{currence_sell.currency}}{% endblock %}</title>
+    {% include 'navbar.html' %}
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Обмен {{currence_by.currency}} на {{currence_sell.currency}}
+                </h4>
+            </div>
+         </div>
+    </div>
+
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h3 class="text-left txt_style1">Внимание!</h3>
+                <h4 class="text-left txt_style2">
+                {% if market == 3 %} <!-- 3 пара фиатных валют -->
+                    Чтобы обменять {{currence_by.currency}} на {{currence_sell.currency}} нужно выполнить несколько шагов:<br>
+                    Ознакомьтесь с условиями договора на оказание услуг обмена, если вы принимаете их, поставьте галочку в соответствующем поле.<br>
+                    Создайте заявку.<br>
+                {% else %}
+                    Чтобы обменять {{currence_by.currency}} на {{currence_sell.currency}} нужно выполнить несколько шагов:<br>
+                    Ознакомьтесь с условиями договора на оказание услуг обмена, если вы принимаете их, поставьте галочку в соответствующем поле.<br>
+                    Создайте заявку.<br>
+                    После отправки {{currence_by.currency}} дождитесь подтверждения сети.
+                {% endif %}
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+          <form  class="form_exchange_currency_bid" name="form_exchange_currency_bid" action="{% url 'Exchange_currency_bid' currency_by_id=currence_by.id currency_sell_id=currence_sell.id %}" method="post">{% csrf_token %}
+            <div class="row">
+                <h4 class="text-center txt_style2" id="kurs">Курс обмена: 1 {{currence_sell.currency}} ➯ {{exchange_kurs_sell}} {{currence_by.currency}}</h4>
+                <h4 class="text-center txt_style2" id="kurs_inverse">Курс обмена: 1 {{currence_by.currency}} ➯ {{exchange_kurs_sell_inverse}} {{currence_sell.currency}}</h4>
+
+                <br>
+                <h3 class="text-left txt_style3">Отдаете:</h3>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        {% if market == 3 %} <!-- 3 пара фиатных валют -->
+                            <h4 class="txt_style2">{{currence_by.currency}} Карта {{name_bank_buy}}</h4>
+                        {% else %}
+                            <h4 class="txt_style2">{{currence_by.currency}}</h4>
+                        {% endif %}
+                         <img class="img_currency" src="{{ currence_by.image_currency.url }}">
+                    </div>
+                    <br><br>
+                    <div class="col-md-4">
+                        <h4>Сумма: {{sum_currency_by|floatformat:2}}</h4>
+                        <h4>Со счета: {{wallet_by}}</h4>
+                    </div>
+                </div>
+
+                <hr class="hr-shelf">
+                <h3 class="text-left txt_style3">Получаете:</h3>
+
+                <div class="form-group">
+                    <div class="col-md-4">
+                        {% if market == 3 %} <!-- 3 пара фиатных валют -->
+                            <h4 class="txt_style2">{{currence_sell.currency}} Карта {{name_bank_sell}}</h4>
+                        {% else %}
+                            <h4 class="txt_style2">{{currence_sell.currency}}</h4>
+                        {% endif %}
+                         <img class="img_currency" src="{{ currence_sell.image_currency.url }}">
+                    </div>
+                    <br><br>
+                    <div class="col-md-4">
+                         <h4>Сумма: {{sum_currency_sell|floatformat:2}}</h4>
+                         <h4>На счет: {{wallet_sell}}</h4>
+                    </div>
+                </div>
+                <hr class="hr-shelf">
+                <div class="form-group">
+                    <h3 class="text-left txt_style3">Личные данные:</h3>
+                    <div class="col-md-4">
+                        <h4>E-mail:</h4>{{email}}
+                    </div>
+                </div>
+            </div>
+           <!--</div>-->
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <!-- здесь onchange активация кнопки по флажку checkbox -->
+                    <div class="form-check">
+                      <input class="form-check-input" name="notify" type="checkbox" value="1" id="flexCheckDefault" onchange="document.getElementById('sendNewSms').disabled = !this.checked;">
+                      <label class="form-check-label" for="flexCheckDefault">
+                        Я прочитал(а) и согласен(сна) с <a href="{% url 'Terms' %}" target="_blank">условиями</a>
+                      </label>
+                    </div>
+                    <input type="submit" name="sendNewSms" disabled="disabled" class="btn btn-primary btn-md section-top" id="sendNewSms" value=" Создать заявку "/>
+                    <!-- Передаем скрытыми input значения переменных в функцию Exchange_currency_bid blok1/views.py -->
+                    <input type="hidden" name="exchange_kurs_sell" value="{{ exchange_kurs_sell }}">
+                    <input type="hidden" name="sum_by" value="{{ sum_currency_by }}">
+                    <input type="hidden" name="wallet_by" value="{{ wallet_by }}">
+                    <input type="hidden" name="sum_sell" value="{{ sum_currency_sell }}">
+                    <input type="hidden" name="wallet_sell" value="{{ wallet_sell }}">
+                    <input type="hidden" name="email" value="{{ email }}">
+                    <input type="hidden" name="market" value="{{ market }}">
+                    <input type="hidden" name="name_bank_buy" value="{{ name_bank_buy }}">
+                    <input type="hidden" name="name_bank_sell" value="{{ name_bank_sell }}">
+                </div>
+            </div>
+          </form>
+        </div>
+    </div>
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h5 class="text-left txt_style2">Обмен {{currence_by.currency}} на {{currence_sell.currency}}</h5>
+                <h6 class="text-left txt_style1">ВНИМАНИЕ</h6>
+                <h5 class="text-left txt_style2">
+                {% if market == 3 %} <!-- 3 пара фиатных валют -->
+                    Выполнение заявки на обмен {{currence_by.currency}} на {{currence_sell.currency}}  происходит в ручном режиме(Р2Р) <br>
+                    После получения перевода с Вашей стороны, мы переведем сумму к получению на указанные Вами реквизиты<br>
+                {% else %}
+                    Выполнение заявки на обмен {{currence_by.currency}} на {{currence_sell.currency}}  происходит в ручном режиме и занимает обработку в течении 5-30 минут,<br>
+                    в зависимости от загруженности операторов.<br>
+                    Все заявки, по которым криптовалюта поступила в течение с 9:00 до 23:00, выплачиваются в день создания заявки.<br>
+                    Если в течении 15 минут после оформления заявки ваш перевод не получил подтверждения по данным сети,<br>
+                    а так же при резком колебании курса (более 0.25%), администрация сервиса оставляет за собой право вернуть перевод обратно отправителю.<br>
+                    Курс фиксируется по заявке на момент подтверждения в сети если за это время курс не стал ниже 0.25% от созданного в заявке.<br>
+                {% endif %}
+                </h5>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

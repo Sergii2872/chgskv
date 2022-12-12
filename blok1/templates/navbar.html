@@ -1,0 +1,53 @@
+<!-- Основное меню -->
+<!-- Меню на jQuery https://www.internet-technologies.ru/articles/obzor-30-luchshih-besplatnyh-jquery-menyu-navigacii.html
+ https://github.com/vadikom/smartmenus
+ http://vadikom.github.io/smartmenus/src/demo/ -->
+<nav role="navigation">
+	<ul id="main-menu" class="sm sm-blue">
+		<li><a href="{% url 'Home' %}">Обмен</a></li>
+        <li><a href="{% url 'NewsFeed' %}">Новости</a></li>
+        <li><a href="{% url 'Regulations' %}">Правила</a></li>
+        <li><a href="{% url 'Contact' %}">Контакты</a></li>
+	</ul>
+</nav>
+
+
+
+<!-- Static navbar  Меню сайта из getbootstrap.com
+  <div class="container">
+    <nav class="navbar navbar-default navbar-main">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="{% url 'Home' %}" class="navbar-brand">Обмен</a></li>
+            <li><a href="{% url 'NewsFeed' %}" class="navbar-brand">Новости</a></li>
+            <li><a href="{% url 'Regulations' %}" class="navbar-brand">Правила</a></li>
+            <li><a href="{% url 'Contact' %}" class="navbar-brand">Контакты</a></li>
+            <!--
+            <li class="dropdown">
+              <a href="#" id="amen" class="navbar-brand" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="false">
+                 Меню выпадающее <b class="caret"></b>  <!-- убрал class dropdown-toggle ,
+              </a>
+              <ul class="dropdown-menu  navbar-main">
+                <li><a href="#" class="navbar-main">Меню1</a></li>
+                <li><a href="#" class="navbar-main">Меню2</a></li>
+                <li><a href="#" class="navbar-main">Меню3</a></li>
+       <!--         <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Меню4</li>
+                <li><a href="#" class="navbar-main">Меню5</a></li>
+                <li><a href="#" class="navbar-main">Меню6</a></li>
+              </ul>
+            </li>  -->
+          <!--</ul>
+        </div><!--/.nav-collapse -->
+      <!--</div>
+    </nav>
+  </div> -->

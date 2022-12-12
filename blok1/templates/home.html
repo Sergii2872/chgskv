@@ -1,0 +1,14 @@
+<!-- Домашняя страница -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+
+
+{% block content %}
+    {% if user.is_superuser == 1 or site_maintenance.maintenance == False %}
+        {% include 'navbar.html' %} <!-- главное меню домашней страницы -->
+        <!-- <br><img src="{% static 'img/fon2.jpg' %}" class="img-responsive img-rounded"> -->
+        {% include 'exchange.html' %} <!-- главное страница обмена -->
+    {% else %}
+        {% include 'maintenance.html' %} <!-- главное страница техобслуживания -->
+    {% endif %}
+{% endblock %}

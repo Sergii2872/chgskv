@@ -1,0 +1,67 @@
+<!-- страница ОБМЕН(главная), вызывается из home.html -->
+<div class="section-top"> <!--  class="section-top" стили в style.css  -->
+     <div class="container-fluid img-responsive img-rounded" id="fon"> <!-- fon картинка фона для блока в style.css -->
+          <div class="row">
+               <div class="col-md-4">
+                   <div class="currency_table_title">
+                        <!-- id="currencies_sell" для function Currencies_Sell_Updating скрипта list_currencies_sell.js отрисовываем выбранную клиентом продаваемую валюту -->
+                        <span id="currencies_sell">Вы отдаете</span>
+                   </div>
+                   {% for name_currences_purchase in name_currences_purchases %}
+                       <form  class="form_currencies_sell" action="{% url 'list_currencies_sell' %}" method="post">{% csrf_token %}
+                           <!-- по class="currencies_sell" передаем атрибутом data id покупаемой валюты в переменной currency_id скрипт list_currencies_sell.js -->
+                           <!-- и url выполнения для href с значениями переменных id покупаемой и id продаваемой валюты в переменной url1 скрипт list_currencies_sell.js -->
+                           <!-- data-url1="{% url 'form_exchange' currence_purchase_id=name_currences_purchase.id currence_sell_id=name_currences_purchase.id%}" -->
+                           <div class="currencies_sell" data-currency_id="{{name_currences_purchase.id}}">
+                               <!-- id="txt" class="contmeleft" id="contmeleft_currency" стили в style.css  -->
+                               <!-- tabindex="{{name_currences_purchase.id}}" для изменения фона по клику в style.css  .contmeleft:focus -->
+                               <a href="#" id="txt"><div class="contmeleft" tabindex="{{name_currences_purchase.id}}">
+                               {% if name_currences_purchase.image_currency %}
+                                   <img src="{{ name_currences_purchase.image_currency.url }}">
+                               {% endif %}
+                               <p id="contmeleft_currency">{{ name_currences_purchase.currency }}</p>
+                               </div></a>
+                           </div>
+
+                       </form>
+                   {% endfor %}
+               </div>
+               <div class="col-md-8" id="currencies_purchase">
+                   <div class="currency_table_title">
+                        <span>Вы получаете</span>
+                   </div>
+                   <!-- если не задан курс или резерв(остаток) то продаваемая валюта не отражается на странице -->
+                   {% for name_currences_sell in name_currences_sells %}
+                              <!-- id="txt1" class="contmeleft" стили в style.css  -->
+                              <!-- в url передаем значения переменных id покупаемой(первой из списка валют так как по этой ссылке переходим если клиент не выбрал валюту которую хочет продать) -->
+                              <!-- и id продаваемой валюты для функции form_exchange blok1/views.py -->
+                              <!-- если клиент выбрал из списка валюту которую хочет продать то ссылка(href) будет срабатывать уже из скрипта list_currencies_sell.js -->
+                              <a href="{% url 'form_exchange' currence_purchase_id=id_first_currency_by currence_sell_id=name_currences_sell.name_currency_sale_id %}" id="txt1" >
+                              <div class="contmeleft">
+                                  {% for name_currence in name_currences %}
+                                     {% if name_currences_sell.name_currency_sale_id == name_currence.id %}
+                                        <img src="{{ name_currence.image_currency.url }}">
+                                        <p>{{ name_currences_sell.name_currency_sale_currency }}</p>
+                                        {% if name_currence.market_exchange_id == 3 %}
+                                            <p> Курс 1 {{ name_currences_purchase.currency }} {{name_currences_sell.name_currency_currency}} ➯ {{ name_currences_sell.kurs_sell_inverse|floatformat:8 }}</p>
+                                        {% else %}
+                                            <p> Курс 1 ➯ {{ name_currences_sell.kurs_sell|floatformat:8 }}</p>
+                                        {% endif %}
+                                     {% endif %}
+                                  {% endfor %}
+
+                                  {% for balance_currence in balance_currences %}
+                                    {% if name_currences_sell.name_currency_sale_id == balance_currence.name_currency_id %}
+                                        <p> Резерв ➯ {{ balance_currence.balance_amount|floatformat:2 }}</p>
+                                    {% endif %}
+                                  {% endfor %}
+                              </div>
+                              </a>
+                           <!-- </div> -->
+                   {% endfor %}
+               </div>
+
+          </div>
+    </div>
+</div>
+

@@ -1,0 +1,32 @@
+{% load static %} <!-- обращаемся в каталог static где наши jpg,png и css -->
+<!-- самая нижняя часть страницы сайта -->
+<footer class="footer">
+        <!-- id присваиваем идентификатор main который описывается в style.css(отступ всего контейнера от верха на 10 пикселей)-->
+        <div class="container-fluid section-top" id="main">
+            <!-- Первая строка(блок) у нас состоит из 4х подблоков равной ширины 12 делим на 4 получаем col-xs-3 -->
+            <div class="row">
+                <!-- 1й - логотип помещенный в папку images-->
+                <div class="col-md-4">
+                    <br>
+                    <img src="{% static 'img/zipper1.jpg' %}" alt="Вжик"  class="social1"/>
+                    <h5>Сервис обмена криптовалют.</h5>
+                    <h6>Copyright 2022</h6>
+
+                </div>
+                <!-- 2й - иконки соц.сетей class присваиваем иконки прописанные в style.css, id присваиваем идентификатор social
+                который описывается в style.css(размер иконок,подсветка), т.е. применяем эффекты только для этого подблока-->
+                <div class="col-md-4">
+                     <h5></h5>
+                </div>
+                <!-- 3й - телефоны -->
+                <div class="col-md-4" id="social">
+                    <br>
+                    <a href="https://t.me/obmen_skv_bot" target="_blank" class="icon-telegram social1"></a>
+                    <!--<a href="http://vk.com" target="_blank" class="icon-vk social2"></a>
+                    <a href="http://facebook.com" target="_blank" class="icon-facebook social2"></a>
+                    <a href="http://twitter.com" target="_blank" class="icon-twitter social2"></a>-->
+                    <h6>Zipper obmen</h6>
+                </div>
+            </div>
+        </div>
+</footer>

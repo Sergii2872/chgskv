@@ -1,0 +1,119 @@
+<!-- Страница заявки с номером ID для обмена клиентом выбранных валют и суммы перед оплатой, значения из blok1/views.py функция Exchange_currency_bid -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+
+
+{% block content %}
+    <title>{% block title %}Обмен {{currence_by.currency}} на {{currence_sell.currency}}{% endblock %}</title>
+    {% include 'navbar.html' %}
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Заявка ID {{request_id.pk}} Обмен {{currence_by.currency}} на {{currence_sell.currency}}
+                </h4>
+            </div>
+         </div>
+    </div>
+
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            {% if market != 3 %} <!-- 3 пара фиатных валют -->
+                <div class="row">
+                    <h5 class="text-left txt_style1">Внимание!</h5>
+                    <h5 class="text-left txt_style2">
+                        После отправки {{currence_by.currency}} дождитесь подтверждения сети.
+                    </h5>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <h4>Сумма платежа: {{sum_currency_by|floatformat:2}} {{currence_by.currency}}</h4>
+                        {% if market == 3 %}
+                            <h4>С карты {{name_bank_buy}}: {{wallet_by}}</h4>
+                        {% else %}
+                            <h4>Со счета: {{wallet_by}}</h4>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <h4>Сумма к получению: {{sum_currency_sell|floatformat:2}} {{currence_sell.currency}}</h4>
+                        {% if market == 3 %}
+                            <h4>На карту {{name_bank_sell}}: {{wallet_sell}}</h4>
+                        {% else %}
+                            <h4>На счет: {{wallet_sell}}</h4>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <hr class="hr-horizontal-gradient">
+            <div class="row">
+                <div class="form-group">
+                    <h5 class="text-left txt_style1">Пожалуйста, будьте внимательны!</h5>
+                    <h5 class="text-left txt_style2">Все поля должны быть заполнены в точном соответствии с инструкцией. В противном случае, платеж может не пройти.</h5>
+                </div>
+            </div>
+            <hr class="hr-horizontal-gradient">
+            <div class="row">
+                <div class="form-group">
+                    <h4 class="text-left txt_style3">Время изменения статуса: {{request_id.updated|date:'d.m.Y'}}, {{request_id.updated|time:'H:i'}}</h4>
+                    {% if request_id.status == 1 %}
+                        <h4 class="text-left txt_style3">Принята, ожидает оплаты клиентом</h4>
+                    {% endif %}
+                    {% if request_id.status == 0 %}
+                        <h3 class="text-left req">Заявка удалена</h3>
+                    {% endif %}
+                    {% if request_id.status == 2 %}
+                        <h3 class="text-left req">Заявка исполнена</h3>
+                    {% endif %}
+                </div>
+            </div>
+           <!--</div>-->
+            <br>
+        </div>
+    </div>
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h5 class="text-left txt_style2">Обмен {{currence_by.currency}} на {{currence_sell.currency}}</h5>
+                <h6 class="text-left txt_style1">ВНИМАНИЕ</h6>
+                <h5 class="text-left txt_style2">
+                {% if market == 3 %} <!-- 3 пара фиатных валют -->
+                    Выполнение заявки на обмен {{currence_by.currency}} на {{currence_sell.currency}}  происходит в ручном режиме(Р2Р) <br>
+                    После получения перевода с Вашей стороны, мы переведем сумму к получению на указанные Вами реквизиты<br>
+                {% else %}
+                    Выполнение заявки на обмен {{currence_by.currency}} на {{currence_sell.currency}}  происходит в ручном режиме и занимает обработку в течении 5-30 минут,<br>
+                    в зависимости от загруженности операторов.<br>
+                    Все заявки, по которым криптовалюта поступила в течение с 9:00 до 23:00, выплачиваются в день создания заявки.<br>
+                {% endif %}
+                </h5>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js_stuff %}
+
+<!-- Подключаем скрипт для редиректа с задержкой на следующую страницу-->
+
+<!-- <script type="text/javascript" src="{% static 'js/redirect_page.js' %}"></script> -->
+
+<script type="text/javascript">
+    $.alert("Формируем заявку");
+    var delay = 1000;
+    setTimeout("document.location.href='{% url 'Exchange_currency_bid_info' request_id=request_id.pk market=market name_bank_buy=name_bank_buy %}'", delay);
+
+</script>
+
+
+{% endblock js_stuff %}

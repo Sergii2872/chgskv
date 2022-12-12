@@ -1,0 +1,147 @@
+<!-- Эта страница не используется т.к. изменилась логика, отражена в prices_currency.html -->
+
+<!-- Страница для просмотра,редактирования связей покупки-продажи валют таблицы БД Name_Currency_Trading blok2/models.py вызываемая из navbar_kaba.html -->
+<!-- Отображаем таблицу с помощью плагина datatables.net, подключаем плагин и его стили в blok1/base.html -->
+<!-- Дополнительно используем фрэймворк rest framework, pip install djangorestframework, pip install django-model-utils -->
+<!-- В settings.py подключаем в INSTALLED_APPS фрэймворк 'rest_framework' -->
+<!-- вызов страницы прописан в blok2/views.py функцией NameCurrencyTrading через blok2/urls.py -->
+<!-- обработка таблицы и всплывающих форм через скрипт js/table_name_currency_trading.js методом ajax-->
+<!-- используем маршрутизатор DefaultRouter фрэймворка rest framework в chgskv/urls.py -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css -->
+{% block title %}Справочник курсов валют{% endblock %}
+
+{% block menu_kab %}
+    {% if user.is_superuser == 1 %}
+       {% include 'navbar_kaba.html' %} <!-- Меню администратора -->
+    {% else %}
+       {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
+    {% endif %}
+{% endblock menu_kab %}
+
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron">
+        <h3 class="text-center">Справочник связей покупки-продажи валют</h3>
+    </div>
+
+    <!-- New  button -->
+    <div class="text-center">
+        <button type="button" data-dismiss="modal" class="btn btn-primary btn-md" id="new">Новая запись</button>
+    </div>
+    <br>
+    <!-- datatables action="/path/to/your/script" {% csrf_token %} -->
+    <form id="frm-datatables" method="POST">{% csrf_token %}
+        <table id="datatables" class="table table-hover">
+            <thead>
+            <tr>
+                <th><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>
+                <th>id</th>
+                <th>Покупаем валюту</th>
+                <th>Продаем валюту(id)</th>
+                <th>Продаем валюту(наименование)</th>
+                <th>Id пары площадки(биржи)</th>
+                <th>Активный</th>
+                <th>Создан</th>
+                <th>Изменен</th>
+                <th>Действие</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+
+            </tr>
+            </tfoot>
+        </table>
+        <br>
+    <p><button class="btn btn-success">Удалить группу</button></p>
+    <!--  id="chekbox" значение в table_prices_currency.js
+    <b>Отправка на сервер для обработки выбора чекбокс:</b><br>
+    <pre id="chekbox">
+    </pre> -->
+    </form>
+
+
+    <!-- NEW and EDIT Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal_title"></h4>
+                </div>
+                <div class="modal-body">
+                    <!-- ValidCurrency() функция валидации select в name_currency_trading.js -->
+                    <form role="form" id="token" onsubmit="return !!(ValidCurrency() & ValidCurrency2())">{% csrf_token %}
+                         <div class="form-group">
+                            <label for="name_currency_id"><span class="glyphicon glyphicon-pencil"></span> Покупаем валюту</label>
+                            <select id="name_currency_id" name="name_currency_id" onchange="ValidCurrency2()">
+                                    <option value="Сделайте выбор">Сделайте выбор</option>
+                              {% for m in namecurrency %}
+                                  <option value="{{ m.id }}">{{ m.currency }}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name_currency_sale_id"><span class="glyphicon glyphicon-pencil"></span> Продаем валюту</label>
+                            <select id="name_currency_sale_id" name="name_currency_sale_id" onchange="ValidCurrency()">
+                                    <option value="Сделайте выбор">Сделайте выбор</option>
+                              {% for m in namecurrency %}
+                                    <option value="{{ m.id }}">{{ m.currency }}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_pair_market"><span class="glyphicon glyphicon-pencil"></span> Id пары площадки(биржи)</label>
+                            <input type="text" class="form-control" id="id_pair_market" name="id_pair_market" placeholder="Enter Id Market"
+                                   required maxlength="30">
+                        </div>
+                        <div class="form-group"><!-- Скрытое поле , значение заносится с помощью функции в table_name_currency_trading.js по id=name_currency_sale_id -->
+                             <input type="hidden" class="form-control" id="name_currency_sale_currency" name="name_currency_sale_currency">
+                        </div>
+                        <div class="form-group">
+                        <label for="is_active"><span class="glyphicon glyphicon-file"></span> Активный</label>
+                        <select id="is_active" name="is_active">
+                        <option value=1>Да</option>
+                        <option value=0>Нет</option>
+                        </select>
+                        </div>
+                        <input type="hidden" id="type" name="type" value="">
+                        <button type="submit" class="btn btn-success btn-block"><span
+                                class="glyphicon glyphicon-ok"></span> OK
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="confirm" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Вы уверенны?</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Удалить</button>
+                    <button type="button" data-dismiss="modal" class="btn">Редактировать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block js_stuff %}
+
+<!-- Подключаем скрипт для таблицы БД наименования валют плагина datatables.net -->
+
+<script src="{% static 'js/table_name_currency_trading.js' %}"></script>
+
+{% endblock js_stuff %}

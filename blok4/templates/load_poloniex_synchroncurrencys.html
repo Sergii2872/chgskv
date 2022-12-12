@@ -1,0 +1,102 @@
+<!-- Страница Синхронизация справочника пар курсов и остатка(обьема) криптовалют со списком пар биржи Poloniex, функция Load_Poloniex_Synchron_Currencies из blok4/views.py -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+{% block title %}Синхронизация справочника пар курсов и остатка(обьема) криптовалют со списком пар биржи Poloniex{% endblock %}
+
+{% block menu_kab %}
+    {% if user.is_superuser == 1 %}
+       {% include 'navbar_kaba.html' %} <!-- Меню администратора -->
+    {% else %}
+       {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
+    {% endif %}
+{% endblock menu_kab %}
+
+{% block content %}
+
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Синхронизация справочника пар курсов и остатка(обьема) криптовалют со списком пар биржи Poloniex
+                </h4>
+                <form class="upload_form" action="{% url 'Load_Poloniex_Synchron_Currencies' %}" method="post">{% csrf_token %}
+                    <p><button class="btn btn-success">Синхронизировать с Poloniex</button></p>
+                </form>
+
+
+                        <div class="col-md-12">
+
+                            <!-- показываем котировки которые присутствуют на бирже Poloniex словарь quotation функции form_exchange файла blok1/views.py -->
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>Валютная пара</th>
+                                            <th>Id пары</th>
+                                            <th>Последняя цена сделки</th>
+                                            <th>Самая низкая текущая цена покупки(asc)</th>
+                                            <th>Самая высокая текущая цена продажи(bid)</th>
+                                            <th>Цена 24 Ч Высокая</th>
+                                            <th>Цена 24 Ч Низкая</th>
+                                            <th>Процент изменения цены</th>
+                                            <th>Объем проданный за последние 24 часа</th>
+                                            <th>Объем котировки за последние 24 часа</th>
+                                            <th>Индикатор указывает, торгуется ли эта пара в настоящее время или нет</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for key, value in quotation.items %}
+                                            <tr>
+                                                <td>
+                                                     {{ key }}
+                                                </td>
+                                                <td>
+                                                     {{ value.id }}
+                                                </td>
+                                                <td>
+                                                     {{ value.last }}
+                                                </td>
+                                                <td>
+                                                     {{ value.lowestAsk }}
+                                                </td>
+                                                <td>
+                                                     {{ value.highestBid }}
+                                                </td>
+                                                <td>
+                                                     {{ value.high24hr }}
+                                                </td>
+                                                <td>
+                                                     {{ value.low24hr }}
+                                                </td>
+                                                <td>
+                                                     {{ value.percentChange }}
+                                                </td>
+                                                <td>
+                                                     {{ value.baseVolume }}
+                                                </td>
+                                                <td>
+                                                     {{ value.quoteVolume }}
+                                                </td>
+                                                <td>
+                                                     {{ value.isFrozen }}
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-2">
+
+                        </div>
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

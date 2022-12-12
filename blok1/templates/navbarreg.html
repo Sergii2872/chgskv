@@ -1,0 +1,26 @@
+<!-- Меню входа, выхода, регистрации -->
+<!-- http://pcvector.net/22-animirovannaya-forma-vhoda-i-avtorizacii-na-jquery.html -->
+<!-- По action="{% url 'Registration' %}" выполняем функцию Registration во views.py  -->
+<!-- {% csrf_token %} стандартное скрытое поле джанго для того чтобы определять что запрос(отправка формы) именно со страницы нашего сайта  -->
+{% load static %}
+
+<!-- Меню входа,выхода,кабинета класс navbar-reg прописываем стили в style.css-->
+{% if request.user.is_authenticated %}
+ <form id="form_logout" action="{% url 'Registration' %}" method="post">{% csrf_token %}
+   <ul class="navbar-reg">
+       <li><a href="{% url 'Home' %}"  id="Log-out">Выйти</a></li>
+       <li><a href="{% url 'Account' %}" id="Kab">Кабинет</a></li>
+       <!-- Отражаем пункт меню в blok2/name_currency.html, переменную reg_menu передаем из blok2/views.py функция NameCurrency -->
+       {% if reg_gl_menu == 1 %}
+            <li><a href="{% url 'Home' %}">Главная</a></li>
+       {% endif %}
+   </ul>
+ </form>
+{% else %}
+   <ul class="navbar-reg">
+       <li><a href="{% url 'Home' %}" id="Log-in">Войти</a></li>
+       <li><a href="{% url 'Home' %}" id="signUp">Регистрация</a></li>
+   </ul>
+{% endif %}
+
+

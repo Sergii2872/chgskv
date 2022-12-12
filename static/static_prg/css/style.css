@@ -1,0 +1,878 @@
+/* иконки для контактов */
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+/* --------------------------------------------------------------------------------------------- */
+
+html, body{
+    height: 100%;
+    max-height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background-color: #edeef0;
+
+}
+/* Класс из home.html, отображение блоков, кнопок в обьеме,закругленных с тенью */
+.section-top{
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 25px;
+    box-shadow:
+    inset rgba(0,0,0,.6) 0 -3px 8px,
+    inset rgba(252,255,255,.7) 0 3px 8px,
+    rgba(0,0,0,.8) 0 3px 8px -3px;
+
+}
+
+/* Класс из base.html(убрал пока не вижу необходимости)
+.wrapper{
+    min-height: 100%;
+}
+*/
+
+.wrapper-content{
+    overflow: auto; /* заменил auto на hidden чтобы убрать внизу меню горизонтальный скролл, вернул */
+ /*   padding-bottom: 180px; /* must be same height as the footer */
+
+}
+
+/* Отступ сверху 10 пикселей всей верхней строки-блока base.html*/
+#main{
+	margin-top:10px;
+
+}
+
+/* Фон для блока новостей из home.html */
+#fon{
+    background-image: url(../img/fon_news.jpg)
+}
+
+/* Фон для блока правил сайта из home.html */
+.fon4{
+    background-image: url(../img/fon4.png)
+}
+/* --------------------------------------------------------------------------------------------- */
+
+/* Стили для текста блока обмена сайта из form_exchange.html */
+.txt_style1{
+    color: #e3122d; /* цвет текста */
+    margin-left: 10px;
+}
+
+.txt_style2{
+    color: #165a8c; /* цвет текста */
+    margin-left: 10px;
+}
+
+.txt_style3{
+    color: #1f6220; /* цвет текста */
+    margin-left: 10px;
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+/* Стили для  формы обмена из form_exchange.html */
+
+.req {
+    color: #ff0000;
+}
+
+/* пример стилей линий https://snipp.ru/html-css/style-line */
+.hr-shelf {
+	margin: -30px auto 10px;
+	padding: 0;
+	height: 50px;
+	border: none;
+	border-bottom: 1px solid #1f1209;
+	box-shadow: 0 20px 20px -20px #333;
+	width: 95%;
+}
+
+.hr-horizontal-gradient {
+	margin: 20px 0;
+	padding: 0;
+	height: 6px;
+	border: none;
+	background: linear-gradient(45deg, #333, #ddd);
+}
+/* --------------------------------------------------------------------------------------------- */
+
+
+/* Вращение картинки https://codepen.io/htmaker/pen/rrqdWE */
+#dvig {
+   margin-top:5px;
+    height: 75px;
+    width: 45px;
+    -webkit-animation-name: rotation;
+    -webkit-animation-duration: 5s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -moz-animation-name: rotation;
+    -moz-animation-duration: 5s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: linear;
+    -o-animation-name: rotation;
+    -o-animation-duration: 5s;
+    -o-animation-iteration-count: infinite;
+    -o-animation-timing-function: linear;
+    animation-name: rotation;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@-webkit-keyframes rotation {
+    0% {-webkit-transform:rotate(0deg);
+        -moz-transform:rotate(0deg);
+        -o-transform:rotate(0deg);
+        transform:rotate(0deg);}
+    100% {-webkit-transform:rotate(360deg);
+        -moz-transform:rotate(360deg);
+        -o-transform:rotate(360deg);
+        transform:rotate(360deg);}
+}
+@-moz-keyframes rotation {
+    0% {-webkit-transform:rotate(0deg);
+        -moz-transform:rotate(0deg);
+        -o-transform:rotate(0deg);
+        transform:rotate(0deg);}
+    100% {-webkit-transform:rotate(360deg);
+        -moz-transform:rotate(360deg);
+        -o-transform:rotate(360deg);
+        transform:rotate(360deg);}
+}
+@-o-keyframes rotation {
+    0% {-webkit-transform:rotate(0deg);
+        -moz-transform:rotate(0deg);
+        -o-transform:rotate(0deg);
+        transform:rotate(0deg);}
+    100% {-webkit-transform:rotate(360deg);
+        -moz-transform:rotate(360deg);
+        -o-transform:rotate(360deg);
+        transform:rotate(360deg);}
+}
+@keyframes rotation {
+    0% {-webkit-transform:rotate(0deg);
+        -moz-transform:rotate(0deg);
+        -o-transform:rotate(0deg);
+        transform:rotate(0deg);}
+    100% {-webkit-transform:rotate(360deg);
+        -moz-transform:rotate(720deg);
+        -o-transform:rotate(360deg);
+        transform:rotate(360deg);}
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+/* Выравнивание текста по ширине */
+.text-justify {
+    text-align: justify; /* Выравнивание по ширине */
+   }
+
+/* --------------------------------------------------------------------------------------------- */
+
+/* Скрытие/раскрытие текста по клику(аккордеон) http://jsfiddle.net/driver/bn96novb/*/
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:400,600,700&subset=latin,cyrillic");
+* {
+  margin:0;
+  padding:0;
+  border:0;
+  outline:medium none;
+  list-style:none
+}
+
+body {
+  background: #ededed;
+  font-family: 'Open Sans',sans-serif;
+  font-size: 14px
+}
+
+.container {
+  width:100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0
+}
+
+h1 {
+  padding: 25px 0;
+  font-weight: 400;
+  font-size:26px;
+  text-align: center
+}
+
+/* стили блока аккордеон */
+.accordion {
+  width:100%;
+  max-width: 600px;
+  margin: 0 auto
+}
+/* секции аккордеона */
+.accordion .accordion_item {
+  margin-bottom:1px;
+  position:relative
+}
+/* заголовки панелей аккордеона */
+.accordion .title_block {
+  font-weight: 400;
+  font-size: 18px;
+  color: #165a8c; /* цвет текста */
+  cursor:pointer;
+  background: #e9eae6; /* цвет фона */
+  padding:10px 55px 10px 15px;
+  -webkit-transition:all .2s linear 0;
+  -webkit-transition-delay:.2s 0;
+  transition:all .2s linear 0
+}
+/* переключатель панелей, положение вниз */
+.accordion .title_block:before {
+  content:'';
+  height:8px;
+  width:8px;
+  display:block;
+  border:2px solid #fefefe;
+  border-right-width:0;
+  border-top-width:0;
+  -ms-transform:rotate(-45deg);
+  -webkit-transform:rotate(-45deg);
+  transform:rotate(-45deg);
+  position:absolute;
+  right:20px;
+  top:18px
+}
+/* активный переключатель, положение вверх */
+.accordion .active_block .title_block:before {
+  border:2px solid #fefefe;
+  border-left-width:0;
+  border-bottom-width:0;
+  top:18px
+}
+.accordion .title_block:hover {
+  background: #c3c4c2
+}
+
+/* заголовок активного блока  */
+.accordion .active_block .title_block {
+  background: #26A69A;
+  color:#fefefe
+}
+/* блоки с содержанием */
+.accordion .info {
+  display:none;
+  padding:10px 15px;
+  overflow: hidden;
+  background:#f7f7f7
+}
+/* параграф внутри блоков с содержанием */
+.accordion .info_item {
+  margin-bottom:10px
+}
+/* картинки внутри аккордеона */
+.accordion .info img {
+    height: auto;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+/* полноразмерная картинка */
+.large-img {
+    width: 100%;
+    margin-bottom: 10px;
+}
+/* миниатюра слева */
+.img-left {
+    width: 25%;
+    float:left;
+    margin:5px 15px 5px 0;
+}
+/* миниатюра справа */
+.img-right {
+    width: 25%;
+    float:right;
+    margin:5px 0 5px 15px;
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+/* Контакты */
+
+.nesolestag-enadenud {
+  width: 615px;
+  margin: 0 auto;
+}
+
+.kesednsoled:after,
+.kesednsoled:before {
+  content: ".";
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  width: 0;
+  height: 0;
+  clear: both;
+}
+.ico-wrap {
+  color: #a612d4;
+  width: 48px;
+  height: 48px;
+  margin: 30px 18px 5px 5px;
+  display: block;
+  text-align: center;
+  font-size: 25px;
+  border: 2px solid #9d1cb7;
+  float: left;
+  border-radius: 30px;
+}
+.ico-contact {
+  line-height: 1.9 !important;
+}
+.meanous-andscoev {
+  float: left;
+  margin-bottom: 20px;
+}
+.aio-icon-title {
+  font-size: 16px;
+  color: #950c96;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 767px) {
+  .meanous-andscoev,
+  .ico-wrap {
+  float: none;
+  text-align: center;
+  }
+  .ico-wrap {
+  margin: 0 auto 15px auto;
+  }
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+/* Стили для меню */
+.navbar{
+    margin-bottom: 0;
+
+}
+
+/* цвет фона, тени и рамки навигационного меню */
+.navbar-main{
+    background-color: #91D4E0;
+    border: 4px solid #E0DBD7;;
+    border-radius: 25px;
+    background: rgb(100,100,100) radial-gradient(circle at 50% 0, rgba(255,255,255,.65), rgba(255,255,255,.35));
+    box-shadow:
+    inset rgba(0,0,0,.6) 0 -3px 8px,
+    inset rgba(252,255,255,.7) 0 3px 8px,
+    rgba(0,0,0,.8) 0 3px 8px -3px;
+
+}
+
+/* пункты меню по центру */
+.navbar-nav{
+    float: none;
+    text-align: center;
+
+}
+
+.navbar-nav li {
+float: none;
+display: inline-block;
+
+}
+
+/* Стиль подсветки выпадающего меню*/
+#amen:hover{
+    border-radius: 25px;
+}
+/* --------------------------------------------------------------------------------------------- */
+
+/* Стили для меню на jQuery[для всей ширины экрана] */
+/* https://github.com/vadikom/smartmenus */
+/* http://vadikom.github.io/smartmenus/src/demo/ */
+
+@media (min-width: 768px) {
+		#main-menu > li {
+			float: none;
+			display: table-cell;
+			width: 1%;
+			text-align: center;
+		}
+	}
+
+@media (min-width: 768px) {
+		#main-menu-simple {
+			float: left;
+			width: 1%;
+		}
+	}
+
+/* --------------------------------------------------------------------------------------------- */
+
+/* Стили для меню входа, регистрации в заголовке*/
+ul.navbar-reg {
+	width: 70%; /* Ширина основного блока меню */
+	height: 30px; /* Высота основного блока меню */
+	position: relative;
+	float: right;
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+ul.navbar-reg li {
+	display: inline-block; /* Отображать как строчный элемент */
+
+}
+
+ul.navbar-reg li a {
+	text-decoration: none; /*убираем подчеркивание текста ссылок*/
+	box-shadow:
+    inset rgba(0,0,0,.6) 0 -3px 8px,
+    inset rgba(252,255,255,.7) 0 3px 8px,
+    rgba(0,0,0,.8) 0 3px 8px -3px;
+    border-radius: 3px;
+}
+
+ul.navbar-reg li a:hover {
+  color:#007224;/*добавляем эффект при наведении*/
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+/* Стили для футера */
+.footer{
+    position: relative;
+ /*   margin-top: -180px; */
+    height: 100px;
+    clear: both;
+/*    background-color: white; */
+
+}
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+/* Стили для иконок vk,facebook,twitter , убрал сдвиг при наведении - , #social:hover */
+#social a{
+	/* Размер иконок делаем 20 пикселей и убираем подчеркивание */
+	font-size:40px;
+	text-decoration:none;
+
+}
+/* При наведении курсора меняем цвет иконок */
+.icon-telegram:hover {
+	color:#1BD13D;
+}
+.icon-vk:hover {
+	color:#1BD13D;
+}
+.icon-facebook:hover {
+	color:#F5F50A;
+}
+.icon-twitter:hover {
+	color:#F50A0E;
+}
+
+/* https://icomoon.io/app   генерация иконок */
+/* Прописываем путь к нашим файлам стилей иконок */
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon.eot?4or1r1');
+  src:  url('../fonts/icomoon.eot?4or1r1#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?4or1r1') format('truetype'),
+    url('../fonts/icomoon.woff?4or1r1') format('woff'),
+    url('../fonts/icomoon.svg?4or1r1#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-vk:before {
+  content: "\ea98";
+}
+
+.icon-facebook:before {
+  content: "\ea90";
+}
+.icon-twitter:before {
+  content: "\ea96";
+}
+.icon-telegram:before {
+  content: "\ea95";
+}
+
+.social1 {
+    box-shadow:
+    inset rgba(0,0,0,.6) 0 -3px 8px,
+    inset rgba(252,255,255,.7) 0 3px 8px,
+    rgba(0,0,0,.8) 0 3px 8px -3px;
+    border-radius: 20px;
+}
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+/* Стили для формы регистрации на jQuery */
+body {
+  font-family: Arial, Helvetica, "Trebuchet MS";
+}
+input {
+  font: 12px/100% Verdana, sans-serif;
+  color: #494949;
+}
+
+#nav-bar {
+  font-size: 14px;
+  font-weight: 500;
+  display: none;
+  height: 40px;
+  left: 30%;
+  position: fixed;
+  line-height: 18px;
+
+}
+#login {
+  /* for firefox, safari, chrome, etc. */
+  -webkit-transform: rotate(-60deg);
+  -moz-transform: rotate(-60deg);
+  left: 0px;
+  cursor: pointer;
+  top: 130px; /* Отступ кнопки авторизации от верха */
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  /* for ie */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+}
+#submit {
+  /* for firefox, safari, chrome, etc. */
+  -webkit-transform: rotate(-60deg);
+  -moz-transform: rotate(-60deg);
+  left: 0px;
+  cursor: pointer;
+  top: 275px;  /* Отступ кнопки регистрации от верха */
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  /* for ie */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+}
+div {
+  font-size: 14px;
+  font-family: Arial, Helvetica, "Trebuchet MS";
+
+}
+
+
+input.form-text {
+  border: 4px solid #c0d679;
+  padding: 4px 10px;
+  font-size: 15px;
+  font-family: Arial, Helvetica, "Trebuchet MS";
+
+}
+input.form-text:focus {
+  background: #ddedbb;
+  border-color: #70a405;
+
+}
+html.js input.form-autocomplete {
+  width: 95%;
+
+}
+
+a.login {
+  display: block;
+  float: right;
+  font-family: "Trebuchet MS", Arial;
+  font-size: 13px;
+  text-decoration: none;
+  padding: 6px 12px 6px 12px;
+  font-weight: bold;
+  color: #266b5d;
+  font-variant: small-caps;
+
+}
+a.login:hover, a.logout:hover {
+  color: #1d2920;
+
+}
+#Login_form {
+  background: transparent url(../img/login_pop.png) no-repeat top center;
+
+}
+#SignupForm {
+  background: transparent url(../img/signup_pop.png) no-repeat top center;
+
+}
+
+/* расположение блока вход/регистрации */
+div.loginform {
+  top: 0px;
+  left: 0px; /*30%*/
+  height: 450px;
+  /*position: fixed; */
+  position: relative;
+  display: none;
+  width: 305px;
+  z-index: 9999; /*устанавливаем блок поверх всех элементов на странице https://www.magentawave.com/2013/02/simple-jquery-floating-block.html*/
+}
+.loginform form {
+  padding: 23px;
+  position: relative;
+  *padding-top: 33px;
+  *padding-bottom: 28px;
+  *overflow: inherit;
+  _padding-top: 30px;
+  _height: 1%;
+
+
+}
+.loginform .item-list {
+  padding-top: 7px;
+  overflow: hidden;
+  _padding-top: 15px;
+
+}
+.loginform .form-item {
+  overflow: hidden;
+  margin: 13px 0px;
+  clear: both;
+  _padding: 4px 0px;
+  _margin: 0px;
+
+}
+.loginform .form-item label {
+  float: left;
+  color: #5c7a72;
+  font-size: 13px;
+  padding-top: 6px;
+
+}
+.loginform .form-item input.form-text {
+  border-width: 1px;
+  background: #eff7f9;
+  float: right;
+  width: 156px;
+
+}
+.loginform .form-item input.form-text:hover, .loginform .form-item input.form-text:focus {
+  background: #FFF;
+
+}
+.loginform .form-submit {
+  background: transparent url(../img/login.png) no-repeat center;
+  padding: 3px 4px;
+  float: right;
+  font-variant: small-caps;
+  font-family: Arial, "Trebuchet MS", Helvetica;
+  color: #e5eae9;
+  border: none;
+  width: 72px;
+  height: 27px;
+
+}
+.loginform .form-submit:hover {
+  color: #FFF;
+  background: url(../img/result.png);
+
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+/* Стили для адаптивного выпадающего информационного окна */
+.overlay{
+  background:transparent url(../img/overlay.png) repeat top left;
+  position:fixed;
+  top:0px;
+  bottom:0px;
+  left:0px;
+  right:0px;
+  z-index:100;
+}
+.box{
+  position:fixed;
+  top:-300px;
+  left:30%;
+  right:30%;
+  background-color:#fff;
+  color:#7F7F7F;
+  padding:20px;
+  border:2px solid #ccc;
+  -moz-border-radius: 20px;
+  -webkit-border-radius:20px;
+  -khtml-border-radius:20px;
+  -moz-box-shadow: 0 1px 5px #333;
+  -webkit-box-shadow: 0 1px 5px #333;
+  z-index:9999;  /* заменил 101 на 9999 - поверх всех окон */
+}
+.box h3{
+  border-bottom: 1px dashed #7F7F7F;
+  margin:-20px -20px 0px -20px;
+  padding:10px;
+  background-color:#FFEFEF;
+  color:#EF7777;
+  -moz-border-radius:20px 20px 0px 0px;
+  -webkit-border-top-left-radius: 20px;
+  -webkit-border-top-right-radius: 20px;
+  -khtml-border-top-left-radius: 20px;
+  -khtml-border-top-right-radius: 20px;
+}
+a.boxclose{
+  float:right;
+  width:26px;
+  height:26px;
+  background:transparent url(../img/cancel.png) repeat top left;
+  margin-top:-30px;
+  margin-right:-30px;
+  cursor:pointer;
+}
+/* --------------------------------------------------------------------------------------------- */
+
+/* Стили для блока обмена */
+
+.currency_table_title {
+    display: block;
+    text-align: center;
+    font: 15px 'Nunito', sans-serif;
+    color: #07147a;
+    padding: 15px 0px;
+    border-bottom: 5px solid #eaeef4;
+    position: relative;
+}
+
+.contmeleft {
+margin-top: 5px;
+margin-bottom: 15px;
+border-radius: 25px;
+box-shadow:
+inset rgba(0,0,0,.6) 0 -3px 8px,
+inset rgba(252,255,255,.7) 0 3px 8px,
+rgba(0,0,0,.8) 0 3px 8px -3px;
+/*border-radius:8px;  скругляем края блока*/
+width: auto; /* общая ширина блока*/
+/* border: 1px solid #d9d9d9;  рамка блока*/
+/*border-bottom: 1px solid #eaeef4;*/
+overflow: hidden; /* скрывает возможность появления прокрутки блока. */
+}
+
+/*по клику меняем фон блока*/
+.contmeleft:focus {
+    background-color: #ebf1f4;
+}
+
+
+.contmeleft img {
+width: 40px; /* ширина картинки */
+height: 40px; /* высота картинки, от неё будет зависеть и размер общего блока */
+/* object-fit: cover;  обрезаем края картинки, если они не вместятся в блок */
+/* object-position: 0 70; тоже обрезка краев */
+margin-right: 10px;
+float: left; /* важный момент. с помощью этого значения, мы показывем браузеру, что блок должен соприкасаться со вторым блоком приемущественно с левой стороны */
+}
+
+.contmeleft p{
+overflow-wrap: normal; /* показывает тексту, что он не должен заходить за границы блока */
+word-wrap: normal;
+word-break: normal; /* не поддерживает Opera12.14, значение keep-all не поддерживается IE, Chrome */
+line-break: auto; /* нет поддержки для русского языка */
+-webkit-hyphens: none; -ms-hyphens: none; hyphens: none; /* значение auto не поддерживается Chrome */
+
+padding: 10px; /* отступ от рамки до текста - делает его красивее */
+margin-left: 20px; /* отступ с левой стороны от блока с картинкой */
+display: inline-block; /* обознначает, что это не просто бесформенный текст, а блок внутри блока */
+font-weight:bold; /* толщина текста - толстый */
+font-size:14px; /* размер текста*/
+margin: 2px 0 0 0; /* отступ от блока с текстом */
+font: 16px 'Nunito', sans-serif;
+color: #000303;
+width:30%;
+}
+
+#contmeleft_currency {
+width:auto; /* наименование валюты в одну строку */
+}
+
+.contmeleft:hover {
+    background-color: #ebf1f4; /* Цвет при наведении валют на главной */
+    }
+
+#txt {
+    text-decoration: none; /* Отменяем подчеркивание у ссылки */
+   }
+#txt1 {
+    text-decoration: none; /* Отменяем подчеркивание у ссылки */
+   }
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+.error {border: 1px red solid;}  /* класс для select(name_currency_trading.html) вызываем из name_currency_trading.js  */
+
+/* --------------------------------------------------------------------------------------------- */
+/* для progress bar в load_poloniex_namecurrency.html */
+.not-visible {
+    display: none;
+}
+
+/* --------------------------------------------------------------------------------------------- */
+/* для img в exchange_currency_result.html */
+.img_currency {
+    width: 50px; /* ширина картинки */
+    height: 50px; /* высота картинки, от неё будет зависеть и размер общего блока */
+}
+
+/* --------------------------------------------------------------------------------------------- */
+/* для текста отступ в terms.html */
+.terms_txt li{
+     margin-left: 40px;
+     list-style-type: square;
+
+}
+
+/* --------------------------------------------------------------------------------------------- */
+/* для модального окна новая запись или редактирования в справочниках там где плагин datatables */
+.modal{
+    z-index:9999;  /* 9999 - поверх всех окон */
+
+}
+
+/* --------------------------------------------------------------------------------------------- */
+/* для input блока оплаты в exchange_currency_pay.html */
+
+.input_pay{
+    font-size:20px;
+    font-weight:bold;
+    color:#000000;
+}
+
+
+#qr{
+    padding: 10px 0 10px;
+
+
+}
+
+#qr_img{
+    width: 260px;
+    height: 260px;
+
+}
+

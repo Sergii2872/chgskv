@@ -1,0 +1,76 @@
+<!-- Страница просмотра пользователей, значения из blok2/views.py функция Users_clients -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+{% block title %}Справочник пользователей{% endblock %}
+
+{% block menu_kab %}
+    {% if user.is_superuser == 1 %}
+       {% include 'navbar_kaba.html' %} <!-- Меню администратора -->
+    {% else %}
+       {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
+    {% endif %}
+{% endblock menu_kab %}
+
+{% block content %}
+
+   <!-- <div class="section-top">   class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Справочник пользователей
+                </h4>
+                <form id="form-orderstable" method="POST">{% csrf_token %}
+                 <table id="orders_table" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Id клиента</th>
+                                <th>Логин</th>
+                                <th>Имя</th>
+                                <th>Фамилия</th>
+                                <th>Email</th>
+                                <th>День рождения</th>
+                                <th>Телефон</th>
+                                <th>Ip адрес</th>
+                                <th>Верификация</th>
+                                <th>Создан</th>
+                                <th>Изменен</th>
+                                <th>Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- показываем заказы определенные в переменной exchange функции OrderProcessing файла blok4/views.py -->
+                            {% for item in users %}
+                                <tr>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.username }}</td>
+                                    <td>{{ item.first_name }}</td>
+                                    <td>{{ item.last_name }}</td>
+                                    <td>{{ item.email }}</td>
+                                    <td>{{ item.profile__birth_date }}</td>
+                                    <td>{{ item.profile__phone }}</td>
+                                    <td>{{ item.profile__location }}</td>
+                                    <td>{{ item.profile__active }}</td>
+                                    <td>{{ item.profile__created }}</td>
+                                    <td>{{ item.profile__updated }}</td>
+                                    <td>
+                                        <input type="submit" name="check_active" class="btn btn-primary btn-md check_active"  value="активировать" data-item_id="{{item.id}}"/>
+                                        <input type="submit" name="check_deactivate" class="btn btn-danger btn-md check_deactivate"  value="деактивировать" data-item_id="{{item.id}}"/>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+         </div>
+   <!--  </div> -->
+
+
+{% endblock %}
+
+{% block js_stuff %}
+
+<script type="text/javascript" src="{% static 'js/users_clients.js' %}"></script>
+
+
+{% endblock js_stuff %}

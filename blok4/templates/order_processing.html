@@ -1,0 +1,91 @@
+<!-- Страница заявки с номером ID для обмена клиентом выбранных валют и суммы перед оплатой с обновлением страницы, значения из blok1/views.py функция Exchange_currency_bid -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+{% block title %}Обработка Заявок{% endblock %}
+
+{% block menu_kab %}
+    {% if user.is_superuser == 1 %}
+       {% include 'navbar_kaba.html' %} <!-- Меню администратора -->
+    {% else %}
+       {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
+    {% endif %}
+{% endblock menu_kab %}
+
+{% block content %}
+
+   <!-- <div class="section-top">   class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Заявки со статусом - ожидают оплаты клиентом
+                </h4>
+                <form id="form-orderstable" method="POST">{% csrf_token %}
+                 <table id="orders_table" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>id клиента</th>
+                                <th>id пары валют</th>
+                                <th>наименование покупаемой валюты</th>
+                                <th>сумма покупки</th>
+                                <th>кошелек(счет) клиента отдает</th>
+                                <th>наименование продаваемой валюты</th>
+                                <th>сумма продажи</th>
+                                <th>кошелек(счет) клиента получает</th>
+                                <th>курс продажи клиенту</th>
+                                <th>курс покупки на бирже факт</th>
+                                <th>сумма покупки факт</th>
+                                <th>кошелек(счет) биржи</th>
+                                <th>время создания</th>
+                                <th>действие</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- показываем заказы определенные в переменной exchange функции OrderProcessing файла blok4/views.py -->
+                            {% for item in bid_list %}
+                                <tr>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id_user }}</td>
+                                    <td>{{ item.id_pair_market }}</td>
+                                    <td>{{ item.name_currency_buy_currency }}</td>
+                                    <td>{{ item.sum_currency_buy }}</td>
+                                    <td>{{ item.wallet_currency_buy }}</td>
+                                    <td>{{ item.name_currency_sell_currency }}</td>
+                                    <td>{{ item.sum_currency_sell }}</td>
+                                    <td>{{ item.wallet_currency_sell }}</td>
+                                    <td>{{ item.kurs_sell }}</td>
+                                    <td>{{ item.kurs_buy_fact }}</td>
+                                    <td>{{ item.sum_currency_buy_fact }}</td>
+                                    <td>{{ item.wallet_fact }}</td>
+                                    <td>{{ item.created }}</td>
+                                    <td>
+                                        {% if item.market == 1 %}
+                                            <input type="submit" name="check_currency" class="btn btn-primary btn-md check_currency"  value="проверить" data-item_id="{{item.id}}"/>
+                                        {% endif %}
+                                        {% if item.market == 3 %}
+                                            <input type="submit" name="perform_currency" class="btn btn-success btn-md perform_currency"  value="выполнить" data-item_id="{{item.id}}"/>
+                                        {% endif %}
+                                        <input type="submit" name="del_currency" class="btn btn-danger btn-md del_currency"  value="удалить" data-item_id="{{item.id}}"/>
+                                        {% if item.market == 1 %}
+                                            <input type="submit" name="buy_currency" class="btn btn-info btn-md buy_currency"  value="купить" data-item_id="{{item.id}}"/>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+         </div>
+   <!--  </div> -->
+
+
+{% endblock %}
+
+{% block js_stuff %}
+
+<script type="text/javascript" src="{% static 'js/order_processing.js' %}"></script>
+
+
+{% endblock js_stuff %}

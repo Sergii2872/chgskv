@@ -1,0 +1,94 @@
+<!-- Страница заявки с номером ID для обмена клиентом выбранных валют и суммы перед оплатой с обновлением страницы, значения из blok1/views.py функция Exchange_currency_bid -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+
+
+{% block content %}
+    <title>{% block title %}Заявка ID {{request_id}}{% endblock %}</title>
+    {% include 'navbar.html' %}
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h4 class="text-center">
+                        Заявка ID {{request_id}} Обмен {{name_currency_buy}} на {{name_currency_sell}}
+                </h4>
+
+                <div class="text-center">
+                    <a class="btn btn-primary btn-md section-top" href="{% url 'Exchange_currency_bid_info' request_id=request_id market=market name_bank_buy=name_bank_buy %}">Вернуться на страницу заявки</a>
+                </div>
+            </div>
+         </div>
+    </div>
+
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                {% if market != 3 %}
+                    <h5 class="text-left txt_style1">Внимание!</h5>
+                    <h5 class="text-left txt_style2">
+                    После отправки {{name_currency_buy}} дождитесь подтверждения сети.
+                    </h5>
+                {% endif %}
+                {% if status == 0 %}
+                    <h5 class="text-left txt_style1">Заявка удалена</h5>
+                {% endif %}
+                {% if status == 2 %}
+                    <h5 class="text-left txt_style3">Заявка исполнена</h5>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if status == 1 %}
+        <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+            <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
+               <div class="text-center">
+                <div class="btn btn-primary btn-md section-top">
+                    <div class="text-center">
+                        <button class="btn btn-info btn-md section-top" onclick="CopyText()">Copy amount</button>
+                    </div>
+                    <div class="text-center">Сумма</div>
+                    <input class="text-center input_pay" type="text" value="{{sum_currency_buy|floatformat:2}}" id="sum" readonly>
+                    <div class="text-center">{{name_currency_buy}}</div>
+                    {% if market == 3 %}
+                       <div class="text-center">
+                            <button class="btn btn-info btn-md section-top" onclick="CopyText1()">Copy account</button>
+                        </div>
+                        <div class="text-center">Счет</div>
+                    {% else %}
+                        <div class="text-center">
+                            <button class="btn btn-info btn-md section-top" onclick="CopyText1()">Copy adress</button>
+                        </div>
+                        <div class="text-center">Адрес</div>
+                    {% endif %}
+                    <input class="text-center input_pay" type="text" value="{{wallet_fact}}" id="adress" readonly>
+                    <div id="qr">
+                         <img src="{% static 'qr/qr.png' %}" title="{{wallet_fact}}" alt="{{wallet_fact}}" id="qr_img">
+                    </div>
+                </div>
+               </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block js_stuff %}
+
+<!-- Подключаем скрипт для копирования элементов в буфер обмена-->
+<!-- https://snipp.ru/jquery/clipboard-js можно использовать скрипт clipboard.js, не использую -->
+<script type="text/javascript">
+    function CopyText() {
+      var text = document.getElementById('sum')
+      text.select();
+      document.execCommand('copy')
+    }
+    function CopyText1() {
+      var text = document.getElementById('adress')
+      text.select();
+      document.execCommand('copy')
+    }
+
+</script>
+
+
+{% endblock js_stuff %}

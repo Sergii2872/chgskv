@@ -1,0 +1,77 @@
+<!-- Меню на jQuery https://www.internet-technologies.ru/articles/obzor-30-luchshih-besplatnyh-jquery-menyu-navigacii.html
+ https://github.com/vadikom/smartmenus
+ http://vadikom.github.io/smartmenus/src/demo/ -->
+<nav role="navigation">
+	<ul id="main-menu" class="sm sm-blue">
+		<li><a href="/">Главная</a></li>
+        <li><a href="{% url 'Account_user' %}">Мои данные</a></li>
+        <li><a href="#">Операции</a>
+              <ul>
+                <li><a href="{% url 'Exchange_operations' %}">Реестр заявок</a></li>
+                <li><a href="{% url 'OrderProcessing' %}">Обработка заявок</a></li>
+              </ul>
+        </li>
+        <li><a href="#">Справочники</a>
+              <ul>
+                <li><a href="{% url 'Site_maintenance_check' %}">Техобслуживание</a></li>
+                <li><a href="{% url 'Users_clients' %}">Пользователи</a></li>
+                <li><a href="{% url 'MarketExchange' %}">Торговая площадка</a></li>
+                <li><a href="{% url 'NameCurrency' %}">Наименование валют</a></li>
+                <li><a href="{% url 'FiatWallet' %}">Счета фиатных валют</a></li>
+                <li><a href="{% url 'BalanceCurrency' %}">Резерв валют</a></li>
+                <li><a href="{% url 'PricesCurrency' %}">Курс валют</a></li>
+                <li><a href="{% url 'FNews' %}">Новости для главной</a></li>
+                <li><a href="{% url 'FNewsImage' %}">Фото для новостей главной</a></li>
+                <li><a href="{% url 'ExchangeList' %}">Реестр заявок на обмен</a></li>
+              </ul>
+        </li>
+        <li><a href="#">Poloniex</a>
+              <ul>
+                <li><a href="{% url 'main' %}">Trading-bot</a></li>
+                <li><a href="{% url 'Load_Poloniex_NameCurrency' %}">Загрузка справочника криптовалют Poloniex</a></li>
+                <li><a href="{% url 'Load_Poloniex_KursCurrency' %}">Загрузка курсов и остатка(обьема) криптовалют биржи Poloniex</a></li>
+                <li><a href="{% url 'Load_Poloniex_SynchronCurrency' %}">Синхронизация справочника пар курсов и остатка(обьема) криптовалют со списком пар биржи Poloniex</a></li>
+              </ul>
+        </li>
+	</ul>
+</nav>
+
+
+<!-- Меню кабинета администратора на bootstrap-->
+<!-- Static navbar  Меню сайта из getbootstrap.com
+  <div class="container-fluid">
+    <nav class="navbar navbar-default navbar-main">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/" class="navbar-brand">Главная</a></li>
+            <li><a href="{% url 'Account_user' %}" class="navbar-brand">Мои данные</a></li>
+            <li><a href="#rezult" class="navbar-brand">Операции</a></li>
+
+            <li class="dropdown">
+              <a href="#" id="amen" class="navbar-brand" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="false">
+                 Справочники <b class="caret"></b>  <!-- убрал class dropdown-toggle ,   -->
+             <!-- </a>
+              <ul class="dropdown-menu  navbar-main">
+                <li><a href="{% url 'NameCurrency' %}" class="navbar-main">Наименование валют</a></li>
+                <li><a href="{% url 'BalanceCurrency' %}" class="navbar-main">Резерв валют</a></li>
+                <li><a href="{% url 'PricesCurrency' %}" class="navbar-main">Курс валют</a></li>
+                <li><a href="{% url 'FNews' %}" class="navbar-main">Новости для главной</a></li>
+                <li><a href="{% url 'FNewsImage' %}" class="navbar-main">Фото для новостей главной</a></li>
+       <!--         <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Меню4</li>  -->
+              <!--</ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      <!--</div>
+    </nav>
+  </div> -->

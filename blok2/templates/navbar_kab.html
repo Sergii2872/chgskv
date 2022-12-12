@@ -1,0 +1,53 @@
+<!-- Меню кабинета пользователя -->
+<!-- Меню на jQuery https://www.internet-technologies.ru/articles/obzor-30-luchshih-besplatnyh-jquery-menyu-navigacii.html
+ https://github.com/vadikom/smartmenus
+ http://vadikom.github.io/smartmenus/src/demo/ -->
+<nav role="navigation">
+	<ul id="main-menu" class="sm sm-blue">
+		<li><a href="/">Главная</a></li>
+        <li><a href="{% url 'Exchange_operations_client' %}">Мои обмены</a></li>
+        <li><a href="{% url 'Account_user' %}">Мои данные</a></li>
+        <li><a href="{% url 'Account_user_pass' %}">Изменить пароль</a></li>
+	</ul>
+</nav>
+
+
+<!-- Static navbar  Меню сайта из getbootstrap.com
+  <div class="container-fluid">
+    <nav class="navbar navbar-default navbar-main">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/" class="navbar-brand">Главная</a></li>
+            <li><a href="#myobmen" class="navbar-brand">Обмен</a></li>
+            <li><a href="#myoper" class="navbar-brand">Мои обмены</a></li>
+            <li><a href="{% url 'Account_user' %}" class="navbar-brand">Мои данные</a></li>
+            <li><a href="{% url 'Account_user_pass' %}" class="navbar-brand">Изменить пароль</a></li>
+
+        <!--    <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="false">
+                 Account <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>  -->
+          <!--</ul>
+        </div><!--/.nav-collapse -->
+      <!--</div>
+    </nav>
+  </div> -->

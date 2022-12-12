@@ -1,0 +1,57 @@
+<!-- Страница для просмотра,редактирования учетных данных(пароля) вызываемая из navbar_kab.html или navbar_kaba.html -->
+<!-- вызов страницы прописан в urls.py , обработка формы(forms.py) прописана в views.py-->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css -->
+{% block title %}Учетные данные{% endblock %}
+
+{% block content %}
+{% if user.is_superuser == 1 %}
+   {% include 'navbar_kaba.html' %} <!-- Меню администратора -->
+{% else %}
+   {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
+{% endif %}
+   <div class="container section-top">
+        <div class="row">
+             <div class="col-md-10 col-lg-offset-1"> <!-- количество колонок-->
+                <br><h3 class="text-center">Учетные данные</h3><br>
+                    <!-- передаем в views.py  в функцию Account_user_pass форму ContactFormPass метод post, т.к. метод post то обязательно передаем csrf_token -->
+                    <!-- csrf_token(передается в views.py) нужен django чтобы делать post запрос и проверять что запрос пришел именно с нашей страницы а не сторонний -->
+                    <form class="form-horizontal" id=form_auth action="{% url 'Account_user_pass' %}" method="post">{% csrf_token %}
+
+                            <div class="form-group">
+                                <div class="col-lg-4">
+                                    <label>Новый пароль</label>
+                                    <span class="form-error">{{ form.password.errors }}</span>
+                                    <input type="text" name="{{ form.password.html_name }}" class="form-control" id="pass1"
+                                        value="{{ request.POST.password }}"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-4">
+                                    <label>Повтор пароля</label>
+                                    <span class="form-error">{{ form.password1.errors }}</span>
+                                    <input type="text" name="{{ form.password1.html_name }}" class="form-control" id="pass2"
+                                        value="{{ request.POST.password1 }}"
+                                    >
+                                </div>
+                            </div>
+
+                        <hr>
+                        <!-- type submit выполнение по событию -->
+                        <!-- По id="auth_userp" в scripts_izreg.js выполняется функция userIzmP изменения пароля -->
+                        <div class="text-right">
+                            <button type="submit" id="auth_userp" class="btn btn-primary btn-md section-top">Изменить</button>
+                        </div>
+
+                    </form>
+             </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+

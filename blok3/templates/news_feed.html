@@ -1,0 +1,77 @@
+<!-- Новости -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+
+
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded" id="fon"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h1 class="text-center">
+                        Новости
+                </h1>
+                    {% for news_feed in news_feeds %}
+                        <div class="col-md-1">
+                            <h5>{{ news_feed.updated }}</h5>
+                        </div>
+                        <div class="col-md-2">
+                            {% for news_image in news_images %}
+                                {% if news_image.to_news.id == news_feed.id %}
+                                    <div>
+                                        <!-- Ссылка на картинку из blok3/urls.py, при клике на картинку новости переходим через
+                                        функцию News_Image_View blok3/view.py на news_image_view.html
+                                        <a href="{% url 'News_Image_View' news_image.id %}">
+                                            <img src="{{ news_image.image.url }}" class="img-responsive" height="auto" width="auto">
+                                        </a>  заменил переход плагином lightbox-->
+                                        <!-- Для отображения картинки использую плагин jquery lightbox -->
+                                        <!-- https://daruse.ru/lightbox, https://lokeshdhakar.com/projects/lightbox2/ -->
+                                        <a href="{{ news_image.image.url }}" data-lightbox="roadtrip">
+                                            <img src="{{ news_image.image.url }}" class="img-responsive" height="auto" width="auto">
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-2">
+                            <h5>{{ news_feed.header }}</h5>
+                        </div>
+                        <div class="col-md-7">
+                            <!-- применяем аккордеон(стили в style.css) -->
+                            <div class="accordion">
+                                <section class="accordion_item">
+                                <h3 class="title_block">{{ news_feed.news|truncatechars:300 }}</h3>
+                                    <div class="info">
+                                        <!-- text-justify выравниваение текста по края класс из style.css -->
+                                        <h5 class="text-justify">{{ news_feed.news }}</h5>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_stuff %}
+<!-- Аккордеон для текста новостей -->
+<!-- http://jsfiddle.net/driver/bn96novb/ -->
+<!-- https://dbmast.ru/otzyvchivyj-akkordeon-s-pomoshhyu-jquery -->
+<script type="text/javascript">
+
+! function(i) {
+  var o, n;
+  i(".title_block").on("click", function() {
+    o = i(this).parents(".accordion_item"), n = o.find(".info"),
+      o.hasClass("active_block") ? (o.removeClass("active_block"),
+        n.slideUp()) : (o.addClass("active_block"), n.stop(!0, !0).slideDown(),
+        o.siblings(".active_block").removeClass("active_block").children(
+          ".info").stop(!0, !0).slideUp())
+  })
+}(jQuery);
+
+</script>
+
+{% endblock js_stuff %}

@@ -1,0 +1,21 @@
+<!-- Страница отображения картинки из новостей по клику на нее -->
+{% extends 'base.html' %} <!-- наследуемся(вставка в base блока content) от основного шаблона base.html (верх,основа,футер) -->
+{% load static %} <!-- обращаемся в каталог static где наши jpg и css, далее в settings.py обращаемся в каталоги static_baz, static_prg -->
+
+
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="section-top"> <!--  class="section-top" стили в style.css  -->
+        <div class="container-fluid img-responsive img-rounded" id="fon"> <!-- fon картинка фона для блока в style.css -->
+            <div class="row">
+                <h1 class="text-center">
+                        Новости
+                </h1>
+                    <div class="text-center">
+                       <img src="{{ image.image.url }}" class="img-responsive img-thumbnail" height="auto" width="auto">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
