@@ -138,7 +138,11 @@ def Home(request):
 
     print("Словарь соответствий id покупаемой валюты - списку id продаваемых валют: ", all_currency_trading_dict)
     print("список покупаемых валют с курсом и у кот в паре остаток не 0", all_currencys_by_list)
-    print("список продаваемых валют соответств первой покупаемой с курсом и в паре остат не 0", all_currency_trading_dict[all_currencys_by_list[0]])
+    # Проверяем если список валют еще пустой(в базе данных валюты еще не заданы, то используем пустой словарь)
+    if len(all_currencys_by_list) == 0:
+        print("список продаваемых валют соответств первой покупаемой с курсом и в паре остат не 0", all_currency_trading_dict)
+    else:
+        print("список продаваемых валют соответств первой покупаемой с курсом и в паре остат не 0", all_currency_trading_dict[all_currencys_by_list[0]])
     # полный список(queryset) наименования валют
     name_currences = Name_Currency.objects.filter(is_active=True)
     # полный список(queryset) резервов валют
@@ -150,23 +154,34 @@ def Home(request):
     # __gt=0 - больше 0 , __lt=0 - меньше 0, __gte=0 - больше или равно 0
     # класс F() Объект представляет значение поля модели (from django.db.models import F)
     # annotate добавляем значение в queryset
-    name_currences_sells = Prices_Currency.objects.filter(is_active=True,
-                                                          name_currency_id=all_currencys_by_list[0],
-                                                          name_currency_sale_id__in=all_currency_trading_dict[all_currencys_by_list[0]],
-                                                          kurs_sell__gt=0) \
-                                                          .values("name_currency_id",
-                                                                  "name_currency_sale_id",
-                                                                  "name_currency_sale_currency",
-                                                                  "kurs_sell").annotate(kurs_sell_inverse=1/F("kurs_sell"),name_currency_currency=Name_Currency.objects.filter(is_active=True, id=F("prices_currency__name_currency_id")).values("currency"))
 
+    if len(all_currencys_by_list) != 0:
+        name_currences_sells = Prices_Currency.objects.filter(is_active=True,
+                                                              name_currency_id=all_currencys_by_list[0],
+                                                              name_currency_sale_id__in=all_currency_trading_dict[all_currencys_by_list[0]],
+                                                              kurs_sell__gt=0) \
+                                                              .values("name_currency_id",
+                                                                      "name_currency_sale_id",
+                                                                      "name_currency_sale_currency",
+                                                                      "kurs_sell").annotate(kurs_sell_inverse=1/F("kurs_sell"),name_currency_currency=Name_Currency.objects.filter(is_active=True, id=F("prices_currency__name_currency_id")).values("currency"))
+        id_first_currency_by = all_currencys_by_list[0]
+        print("id продаваемых валют", all_currency_trading_dict[all_currencys_by_list[1]])
+
+    else:
+        # Проверяем если список валют еще пустой(в базе данных валюты еще не заданы, то задаем пустой queryset и id первой валюты присваиваем 0)
+        name_currences_sells = Prices_Currency.objects.filter(is_active=True)
+        id_first_currency_by = 0
     print("queryset покупаемых валют:", name_currences_purchases)
     print("queryset продаваемых валют:", name_currences_sells)
-    #print("queryset курсы продаваемых валют:", name_currences_sells_kurs)
-    id_first_currency_by = all_currencys_by_list[0]
     print("id первой покупаемой валюты", id_first_currency_by)
-    print("id продаваемых валют", all_currency_trading_dict[all_currencys_by_list[1]])
+
 
     # получаем значение индикатора техобслуживания сайта по id=1(в БД обязательно должна быть запись под id=1 !)
+    site_maintenance = Site_maintenance.objects.filter(pk=1)
+    # проверяем есть ли запись в БД с id=1, если нет то создаем ее с первоначальным значением True("Сайт на техобслуживании")
+    if not site_maintenance:
+        site_maintenance = Site_maintenance.objects.create(maintenance=True)
+
     site_maintenance = Site_maintenance.objects.get(pk=1)
 
 
