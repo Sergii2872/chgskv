@@ -79,10 +79,12 @@ $(document).ready(function(){  /* Стандартная обертка, т.е. 
                         $('#lc').text(" "+data.location);
                         $('#bd').text(" "+$.date(data.birth_date));
 
-                        popup('#box9'); /* вызываем выпадающее окно из wind_pop.js, передаем id="box9" для info.html */
+                        //popup('#box9'); /* вызываем выпадающее окно из wind_pop.js, передаем id="box9" для info.html */
+                        $.alert('Учетные данные успешно изменены!');
                         }
                     if (data.vreg == '0'){
-                        popup('#box10'); /* вызываем выпадающее окно из wind_pop.js, передаем id="box10" для info.html */
+                        //popup('#box10'); /* вызываем выпадающее окно из wind_pop.js, передаем id="box10" для info.html */
+                        $.alert('Учетные данные не корректные!');
                     }
                  }
 
@@ -124,15 +126,17 @@ $(document).ready(function(){  /* Стандартная обертка, т.е. 
                  console.log(data); /* отображение в консоли логина пользователя */
                  if (data){ /* вызываем выпадающее окно из wind_pop.js, передаем id="box6  boxN" для info.html */
                      if (data.vizm == '0'){
-                        alert('Пароль успешно изменен!');
+                        $.alert('Пароль успешно изменен!');
                         //popup('#box6');
                         window.location.replace("http://"+location.host+"/Kabinet"); /* перегружаем страницу кабинета*/
                      }
                      if (data.vizm == '1'){
-                        popup('#box7');
+                        //popup('#box7');
+                        $.alert('Пароль не совпадает!');
                      }
                      if (data.vizm == '2'){
-                        popup('#box8');
+                        //popup('#box8');
+                        $.alert('Пароль не может быть пустым!');
                      }
                  }
 

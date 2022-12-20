@@ -88,9 +88,6 @@ let table = $('#datatables').DataTable({
             }
             if(st == 2){
                 return 'Заявка исполнена';
-            }
-            if(st != 0 && st != 1 && st != 2){
-                return {"data": "status"};
             }}
         },
         {"data": "is_active"},
