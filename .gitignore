@@ -156,3 +156,5 @@ GitHub.sublime-settings
 # settings(key !)
 local_settings.py
 prod_settings.py
+
+gunicorn.conf.py
