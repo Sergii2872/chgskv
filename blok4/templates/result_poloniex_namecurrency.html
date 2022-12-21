@@ -53,7 +53,8 @@
 <script>
     // инициализация скрипта progress bar celery
     // https://github.com/czue/celery-progress
-    var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+    // Локально var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+    var progressUrl = "{% url 'js:task_status' task_id %}";
 
       function customResult(resultElement, result) {
         $( resultElement ).append(
