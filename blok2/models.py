@@ -97,7 +97,7 @@ class Name_Currency(models.Model):
     currency = models.CharField(max_length=50, blank=True, null=True, default=None)  # название валюты
     symbol = models.CharField(max_length=10, blank=True, null=True, default=None)  # тикер валюты(символ)
     image_currency = models.ImageField(upload_to='image_currency/', blank=True, null=True, max_length=255) # графич символ валюты
-    wallet = models.CharField(max_length=80, blank=True, null=True, default=None)  # кошелек(счет) валюты
+    wallet = models.CharField(max_length=120, blank=True, null=True, default=None)  # кошелек(счет) валюты
     is_active = models.BooleanField(default=False)  # Поле для включения(отключения) отображения записи
     created = models.DateTimeField(auto_now_add=True, auto_now=False)  # время создания записи
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)  # время изменения записи """
@@ -168,7 +168,7 @@ class Fiat_Wallet(models.Model):
     name_currency = models.ForeignKey(Name_Currency, on_delete=models.CASCADE, blank=True, null=True, default=None)  # Связка(ссылка) на таблицу БД справочника наименования валют
     name_bank = models.CharField(max_length=30, blank=True, null=True, default=None)  # название банка
     image_bank = models.ImageField(upload_to='image_bank/', blank=True, null=True, max_length=255) # графич символ банка
-    wallet_bank = models.CharField(max_length=80, blank=True, null=True, default=None)  # кошелек(счет) валюты в банке
+    wallet_bank = models.CharField(max_length=120, blank=True, null=True, default=None)  # кошелек(счет) валюты в банке
     is_active = models.BooleanField(default=False)  # Поле для включения(отключения) отображения записи
     created = models.DateTimeField(auto_now_add=True, auto_now=False)  # время создания записи
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)  # время изменения записи """
@@ -616,15 +616,15 @@ class Exchange_List(models.Model):
     name_currency_buy_id = models.IntegerField(default=0)  # id покупаемой валюты у клиента
     name_currency_buy_currency = models.CharField(max_length=50, blank=True, null=True, default=None)  # наименование покупаемой валюты у клиента
     sum_currency_buy = models.DecimalField(max_digits=30, decimal_places=10, default=0)  # сумма покупки валюты у клиента
-    wallet_currency_buy = models.CharField(max_length=80, blank=True, null=True, default=None)  # кошелек(счет) с которго клиент отдает валюту
+    wallet_currency_buy = models.CharField(max_length=120, blank=True, null=True, default=None)  # кошелек(счет) с которго клиент отдает валюту
     name_currency_sell_id = models.IntegerField(default=0)  # id продаваемой валюты клиенту
     name_currency_sell_currency = models.CharField(max_length=50, blank=True, null=True, default=None)  # наименование продаваемой валюты клиенту
     sum_currency_sell = models.DecimalField(max_digits=30, decimal_places=10, default=0)  # сумма продажи валюты клиенту
-    wallet_currency_sell = models.CharField(max_length=80, blank=True, null=True, default=None)  # кошелек(счет) на который клиент получает валюту
+    wallet_currency_sell = models.CharField(max_length=120, blank=True, null=True, default=None)  # кошелек(счет) на который клиент получает валюту
     kurs_sell = models.DecimalField(max_digits=30, decimal_places=10, default=0)  # курс продажи валюты клиенту
     kurs_buy_fact = models.DecimalField(max_digits=30, decimal_places=10, default=0)  # курс фактический покупки валюты клиенту
     sum_currency_buy_fact = models.DecimalField(max_digits=30, decimal_places=10, default=0)  # сумма за которую фактически купили валюту для клиента
-    wallet_fact = models.CharField(max_length=80, blank=True, null=True, default=None)  # кошелек(счет) на который клиент переводит валюту для покупки на бирже(мой кошелек)
+    wallet_fact = models.CharField(max_length=120, blank=True, null=True, default=None)  # кошелек(счет) на который клиент переводит валюту для покупки на бирже(мой кошелек)
     status = models.IntegerField(default=0)  # статус заявки(0-аннулирована,1-принята,2-исполнена)
     is_active = models.BooleanField(default=False)  # Поле для включения(отключения) отображения записи
     created = models.DateTimeField(auto_now_add=True, auto_now=False)  # время создания записи
