@@ -94,7 +94,7 @@ ORDER_COLUMN_CHOICES_NameCurrency = Choices(
 class Name_Currency(models.Model):
     market_exchange = models.ForeignKey(Market_Exchange, on_delete=models.CASCADE, blank=True, null=True, default=None)  # Связка(ссылка) на таблицу БД справочника торговых площадок
     id_market = models.IntegerField(default=0)  # записываем в поле id валюты из торговой площадки(биржи)) (здесь 1-Poloniex,2-Binance,3-Nomarket[фиатные валюты])
-    currency = models.CharField(max_length=30, blank=True, null=True, default=None)  # название валюты
+    currency = models.CharField(max_length=50, blank=True, null=True, default=None)  # название валюты
     symbol = models.CharField(max_length=10, blank=True, null=True, default=None)  # тикер валюты(символ)
     image_currency = models.ImageField(upload_to='image_currency/', blank=True, null=True, max_length=255) # графич символ валюты
     wallet = models.CharField(max_length=80, blank=True, null=True, default=None)  # кошелек(счет) валюты
@@ -243,7 +243,7 @@ class Prices_Currency(models.Model):
     market_exchange = models.ForeignKey(Market_Exchange, on_delete=models.CASCADE, blank=True, null=True, default=3)  # Связка(ссылка) на таблицу БД справочника торговых площадок
     name_currency = models.ForeignKey(Name_Currency, on_delete=models.CASCADE, blank=True, null=True, default=None) # Связка(ссылка) на таблицу БД справочника наименования валют
     name_currency_sale_id = models.IntegerField(default=0)  # для покупаемой валюты name_currency продаем валюту(записываем в поле id валюты)
-    name_currency_sale_currency = models.CharField(max_length=30, blank=True, null=True, default=None)  # для покупаемой валюты name_currency продаем валюту(записываем в поле наименование валюты)
+    name_currency_sale_currency = models.CharField(max_length=50, blank=True, null=True, default=None)  # для покупаемой валюты name_currency продаем валюту(записываем в поле наименование валюты)
     min_buy = models.DecimalField(max_digits=20, decimal_places=5, default=0)  # минимальная сумма покупки валюты
     max_buy = models.DecimalField(max_digits=20, decimal_places=5, default=0)  # максимальная сумма покупки валюты
     kurs_sell = models.DecimalField(max_digits=30, decimal_places=10, default=0) # курс продажи
@@ -614,11 +614,11 @@ class Exchange_List(models.Model):
     id_user = models.IntegerField(default=0)  # id клиента
     id_pair_market = models.IntegerField(default=0)  # записываем в поле id пары валют из торговой площадки(биржи)) покупки-продажи
     name_currency_buy_id = models.IntegerField(default=0)  # id покупаемой валюты у клиента
-    name_currency_buy_currency = models.CharField(max_length=30, blank=True, null=True, default=None)  # наименование покупаемой валюты у клиента
+    name_currency_buy_currency = models.CharField(max_length=50, blank=True, null=True, default=None)  # наименование покупаемой валюты у клиента
     sum_currency_buy = models.DecimalField(max_digits=30, decimal_places=10, default=0)  # сумма покупки валюты у клиента
     wallet_currency_buy = models.CharField(max_length=80, blank=True, null=True, default=None)  # кошелек(счет) с которго клиент отдает валюту
     name_currency_sell_id = models.IntegerField(default=0)  # id продаваемой валюты клиенту
-    name_currency_sell_currency = models.CharField(max_length=30, blank=True, null=True, default=None)  # наименование продаваемой валюты клиенту
+    name_currency_sell_currency = models.CharField(max_length=50, blank=True, null=True, default=None)  # наименование продаваемой валюты клиенту
     sum_currency_sell = models.DecimalField(max_digits=30, decimal_places=10, default=0)  # сумма продажи валюты клиенту
     wallet_currency_sell = models.CharField(max_length=80, blank=True, null=True, default=None)  # кошелек(счет) на который клиент получает валюту
     kurs_sell = models.DecimalField(max_digits=30, decimal_places=10, default=0)  # курс продажи валюты клиенту
