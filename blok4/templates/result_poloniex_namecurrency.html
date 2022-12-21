@@ -48,13 +48,13 @@
 <!-- Пример progress bar https://github.com/PrettyPrinted/youtube_video_code/tree/master/2020/06/24/How%20to%20Create%20a%20Celery%20Task%20Progress%20Bar%20in%20Django/djangoprogressbar/progress -->
 <!-- Подключаем скрипт celery progress bar https://github.com/czue/celery-progress -->
 <!-- Локально  <script src="{% static 'celery_progress/celery_progress.js' %}"></script> -->
-<script src="{% static 'js/celery_progress.js' %}"></script>
+<script src="{% static 'celery_progress/celery_progress.js' %}"></script>
 
 <script>
     // инициализация скрипта progress bar celery
     // https://github.com/czue/celery-progress
     // Локально var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
-    var progressUrl = "{% url 'js:task_status' task_id %}";
+    var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
 
       function customResult(resultElement, result) {
         $( resultElement ).append(
