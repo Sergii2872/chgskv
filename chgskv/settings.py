@@ -198,7 +198,7 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media")
 
-QR_ROOT = os.path.join(BASE_DIR, "static", "static_prg/qr/") # папка для записи img qr-код
+QR_ROOT = os.path.join(BASE_DIR, "static", "qr/") # папка для записи img qr-код
 
 
 # Настройки почтового сервера
