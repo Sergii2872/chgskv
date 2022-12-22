@@ -47,7 +47,9 @@
 <!-- celery запускаем в отдельном окне терминала командой celery -A chgskv worker -l info -P gevent -->
 <!-- Пример progress bar https://github.com/PrettyPrinted/youtube_video_code/tree/master/2020/06/24/How%20to%20Create%20a%20Celery%20Task%20Progress%20Bar%20in%20Django/djangoprogressbar/progress -->
 <!-- Подключаем скрипт celery progress bar https://github.com/czue/celery-progress -->
-<!-- Локально  <script src="{% static 'celery_progress/celery_progress.js' %}"></script> -->
+<!-- Скрипт берется на локальном комп. из директории установки пакетаC:/Users/ВАЛЕНТИНА/AppData/Local/Programs/Python/Python36-32/Lib/site-packages/celery_progress/static/celery_progress -->
+<!-- Скрипт берется на сервере из директории установки пакета /home/zipper/venv/lib/python3.8/site-packages/celery_progress/static/celery_progress -->
+<script src="{% static 'celery_progress/celery_progress.js' %}"></script>
 
 
 <script>

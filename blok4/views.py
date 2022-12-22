@@ -140,7 +140,7 @@ def my_task(self, seconds):
                     result_delete_currency_poloniex += 1
 
         i = 0  # для следующей итерации устанавливаем индикатор в 0
-        #time.sleep(seconds) # для задержки итераций прогрессбара и цикла
+        time.sleep(1) # для задержки итераций прогрессбара и цикла
         l += 1
         progress_recorder.set_progress(l, count_progressbar) # celery progress bar
 
@@ -425,6 +425,7 @@ def my_task_kurs(self, seconds):
 
 
         i = 0  # для следующей итерации устанавливаем индикатор в 0
+        time.sleep(1)  # для задержки итераций прогрессбара и цикла
         l += 1
         progress_recorder.set_progress(l, count_progressbar) # celery progress bar
 
@@ -505,7 +506,7 @@ def my_task_synchron(self, seconds):
             prices_currency.save()
             result_delete_synchroncurrency_poloniex += 1
 
-
+        time.sleep(1)  # для задержки итераций прогрессбара и цикла
         l += 1
         progress_recorder.set_progress(l, count_progressbar) # celery progress bar
 
