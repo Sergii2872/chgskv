@@ -165,7 +165,7 @@ def Home(request):
                                                                       "name_currency_sale_currency",
                                                                       "kurs_sell").annotate(kurs_sell_inverse=1/F("kurs_sell"),name_currency_currency=Name_Currency.objects.filter(is_active=True, id=F("prices_currency__name_currency_id")).values("currency"))
         id_first_currency_by = all_currencys_by_list[0]
-        print("id продаваемых валют", all_currency_trading_dict[all_currencys_by_list[1]])
+        print("id продаваемых валют", all_currency_trading_dict[all_currencys_by_list[0]])
 
     else:
         # Проверяем если список валют еще пустой(в базе данных валюты еще не заданы, то задаем пустой queryset и id первой валюты присваиваем 0)

@@ -79,7 +79,7 @@ urlpatterns = [
     path('api/', include(router.urls)), # для таблицы плагина datatables, api фрэмворка rest framework
     path('Obmen/', include('blok3.urls')),
     path('Poloniex/', include('blok4.urls')),
-    re_path('celery-progress/', include('celery_progress.urls')), # для celeri progressbar
+    path('celery-progress/', include('celery_progress.urls')), # для celeri progressbar
 
 ]
 
