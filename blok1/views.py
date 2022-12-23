@@ -618,10 +618,10 @@ def form_exchange(request, currence_purchase_id, currence_sell_id):
     # счета фиатных валют
     # если пара валют в справочнике курсов не принадлежит ни одной торговой площадке(бирже)(здесь 1-Poloniex,2-Binance,3-Nomarket[фиатные валюты])
     if currencypair_exchange_rate["market_exchange_id"] == 3:
-        wallet_bank_buy = Fiat_Wallet.objects.filter(is_active=True, name_currency_id=currence_purchase_id)
+        wallet_bank_buy = Fiat_Wallet.objects.filter(is_active=True, name_currency_id=currence_purchase_id).order_by("id")
         # получаем только первую запись
         placeholder_bank_buy = Fiat_Wallet.objects.filter(is_active=True, name_currency_id=currence_purchase_id).first()
-        wallet_bank_sell = Fiat_Wallet.objects.filter(is_active=True, name_currency_id=currence_sell_id)
+        wallet_bank_sell = Fiat_Wallet.objects.filter(is_active=True, name_currency_id=currence_sell_id).order_by("id")
         # получаем только первую запись
         placeholder_bank_sell = Fiat_Wallet.objects.filter(is_active=True, name_currency_id=currence_sell_id).first()
 
