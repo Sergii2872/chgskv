@@ -266,6 +266,7 @@ def list_currencies_sell(request):
     name_currences_purchases_trades = Name_Currency.objects.filter(is_active=True, id__in=all_currencys_by_list).order_by("id").values("id")  # покупаемые валюты словарь только id
     # задаем список продаваемых валют соответствующий выбранной покупаемой валюте  name_currency_id=currency_id
     # из словаря соответствий name_currency_sale_id__in=all_currency_trading_dict[currency_id]
+    # F("prices_currency__name_currency_id")     не используюю так как возникает ошибка возврата значения запросса более одного значения
     name_currences_sells = Prices_Currency.objects.filter(is_active=True,
                                                           name_currency_id=currency_id,
                                                           name_currency_sale_id__in=all_currency_trading_dict[currency_id],
@@ -273,7 +274,7 @@ def list_currencies_sell(request):
                                                           .values("name_currency_id",
                                                                   "name_currency_sale_id",
                                                                   "name_currency_sale_currency",
-                                                                  "kurs_sell").annotate(kurs_sell_inverse=1/F("kurs_sell"),name_currency_currency=Name_Currency.objects.filter(is_active=True, id=F("prices_currency__name_currency_id")).values("currency"))
+                                                                  "kurs_sell").annotate(kurs_sell_inverse=1/F("kurs_sell"),name_currency_currency=Name_Currency.objects.filter(is_active=True, id=currency_id).values("currency"))
 
     print("queryset покупаемых валют:", name_currences_purchases_trades)
     print("queryset продаваемых валют:", name_currences_sells)
