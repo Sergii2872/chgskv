@@ -499,8 +499,8 @@ def my_task_synchron(self, seconds):
             # в справочнике курсов пар валют и эта пара активна и эта пара принадлежит площадке(бирже) Poloniex(market_exchange_id=1)
             if value["isFrozen"] == 0 and value["id"] == prices_currency.id_pair_market and prices_currency.is_active == True and prices_currency.market_exchange_id == 1:
                 k = 1 # если такая пара есть в актуальном словаре Poloniex
-                # если такой пары уже нет в актуальном словаре Poloniex
-        if k == 0 and prices_currency.is_active == True:
+                # если такой пары уже нет в актуальном словаре Poloniex и эта пара принадлежит Poloniex(в справочнике бирж под 1)
+        if k == 0 and prices_currency.is_active == True and prices_currency.market_exchange_id == 1:
             prices_currency.is_active = False
             prices_currency.updated = datetime
             prices_currency.save()
