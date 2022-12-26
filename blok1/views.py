@@ -153,7 +153,7 @@ def Home(request):
     # из словаря соответствий name_currency_sale_id__in=all_currency_trading_dict[all_currencys_by_list[1]]
     # __gt=0 - больше 0 , __lt=0 - меньше 0, __gte=0 - больше или равно 0
     # класс F() Объект представляет значение поля модели (from django.db.models import F)
-    # F("prices_currency__name_currency_id")     не используюю так как возникает ошибка возврата значения запросса более одного значения
+    # F("prices_currency__name_currency_id")     не используюю так как возникает ошибка возврата значения запроса более одного значения
     # annotate добавляем значение в queryset
 
     if len(all_currencys_by_list) != 0:
