@@ -14,6 +14,7 @@ import getopt
 import time
 from datetime import datetime
 import json
+import os
 
 # пакет для progress bar  https://pysimplegui.readthedocs.io/en/latest/#pysimplegui-users-manual
 import PySimpleGUI as sg
@@ -31,6 +32,14 @@ from celery import shared_task # pip install celery
 from celery_progress.backend import ProgressRecorder # pip install celery-progress
 
 # Create your views here.
+
+# --------------- Функция периодического выполнения celery отправки сообщений в телеграмм( пакет django-sitemessage, https://pypi.org/project/django-sitemessage/)
+# ссылка на эту функцию и период выполнения задан в CELERY_BEAT_SCHEDULE файла settings.py
+@shared_task(bind=True)
+def telegram_message():
+    print("обработка сообщений телеграмм")
+    result = os.system("python manage.py sitemessage_send_scheduled")
+    print(result)
 
 # --------------- блок загрузки валют биржи Poloniex --------------------------------------------------------------
 # Функция для загрузки валют биржи Poloniex
