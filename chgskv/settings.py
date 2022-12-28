@@ -201,19 +201,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media")
 QR_ROOT = os.path.join(BASE_DIR, "static", "qr/") # папка для записи img qr-код
 
 
-# Настройки почтового сервера
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.mail.ru'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = "skiveda@mail.ru"
-# EMAIL_HOST_USER = "skiveda@gmail.com"
-# EMAIL_HOST_USER = 'SKIVEDA'
-EMAIL_HOST_PASSWORD = "20061983Skv"
-# EMAIL_HOST_PASSWORD = "28011972skv"
-EMAIL_PORT = 587
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 # настройка Начиная с Django 3.2, теперь вы можете настроить тип автоматически созданного основного ключа в настройках.
 # https://question-it.com/questions/3427304/preduprezhdenie-avtomaticheski-sozdannyj-pervichnyj-kljuch-ispolzuemyj-pri-opredelenii-tipa-pervichnogo-kljucha-po-umolchaniju-djangodbmodelsautofield
@@ -223,11 +211,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DATE_FORMAT = '%m/%d/%Y'
 DATETIME_FORMAT = '%m/%d/%Y %I:%M'
 
-# Poloniex Api key
-# Пакет для работы с API биржи Poloniex
-# инициализация pip install poloniex(https://pypi.org/project/poloniex/)
-POLONIEX_API_KEY = os.environ.get('POLONIEX_API_KEY', '97FGNN1N-ANZCODUT-RBBZQK1W-J2UV07A9')
-POLONIEX_SECRET = os.environ.get('POLONIEX_SECRET', '06ef76c2f202313667ba1979a378752e3e02dde582673e0bd0e9a80d651a1f9897865fa672964c1ef404f24f356840d9255188ce80a6c0bf62ce38670bacb470')
 
 # настройка celery для progress bar, pip install celery, pip install redis
 # pip install django-celery-results
@@ -254,8 +237,6 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
-# Telegram bot-token
-BOT_TOKEN = '5673547649:AAGattPvV8VCtzkS9uNRaLBgZAkw1Shayf8'
 
 # Условие для выбора настроек, если локально то берем из local_settings.py, если на сервере то prod_settings.py
 
