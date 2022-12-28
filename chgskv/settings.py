@@ -28,6 +28,10 @@ INSTALLED_APPS = [
 
     # Добавляем сторонние пакеты
 
+    # celeri Пакет периодические задачи
+    # https://django.fun/ru/docs/celery/5.1/userguide/periodic-tasks/
+    # https://pypi.org/project/django-celery-beat/
+    'django_celery_beat',
     # celeri для отображения progressbar
     # https://github.com/czue/celery-progress
     'celery_progress',
@@ -230,12 +234,6 @@ CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_CELERYBEAT_SCHEDULE = {
-    'telegram-sitemessage': {
-        'task': 'blok4.views.telegram_message',
-        'schedule': 15.0,
-    }
-}
 
 
 # Условие для выбора настроек, если локально то берем из local_settings.py, если на сервере то prod_settings.py

@@ -35,11 +35,11 @@ from celery_progress.backend import ProgressRecorder # pip install celery-progre
 
 # --------------- Функция периодического выполнения celery отправки сообщений в телеграмм( пакет django-sitemessage, https://pypi.org/project/django-sitemessage/)
 # ссылка на эту функцию и период выполнения задан в CELERY_BEAT_SCHEDULE файла settings.py
-@shared_task()
+@shared_task
 def telegram_message():
     print("обработка сообщений телеграмм")
-    #result = os.system("python manage.py sitemessage_send_scheduled")
-    #print(result)
+    result = os.system("python manage.py sitemessage_send_scheduled")
+    print(result)
 
 # --------------- блок загрузки валют биржи Poloniex --------------------------------------------------------------
 # Функция для загрузки валют биржи Poloniex
