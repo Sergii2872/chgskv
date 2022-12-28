@@ -230,7 +230,7 @@ CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_BEAT_SCHEDULE = {
+CELERY_CELERYBEAT_SCHEDULE = {
     'telegram-sitemessage': {
         'task': 'blok4.views.telegram_message',
         'schedule': 15.0,
