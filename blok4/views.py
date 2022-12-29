@@ -38,8 +38,11 @@ from celery_progress.backend import ProgressRecorder # pip install celery-progre
 @shared_task
 def telegram_message():
     print("обработка сообщений телеграмм")
-    result = os.system("python3.8 manage.py sitemessage_send_scheduled")
-    print(result)
+    os.system("cd ~")   # корневая директория сервера
+    os.system("source venv/bin/activate") # активируем среду джанго
+    os.system("cd chgskv")  # переходим в директорию проекта
+    os.system("python3.8 manage.py sitemessage_send_scheduled") # запускаем обработчик сообщений боту телеграмм
+   
 
 # --------------- блок загрузки валют биржи Poloniex --------------------------------------------------------------
 # Функция для загрузки валют биржи Poloniex
