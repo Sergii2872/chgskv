@@ -38,7 +38,7 @@ from celery_progress.backend import ProgressRecorder # pip install celery-progre
 @shared_task
 def telegram_message():
     print("обработка сообщений телеграмм")
-    result = os.system("python manage.py sitemessage_send_scheduled")
+    result = os.system("python3.8 manage.py sitemessage_send_scheduled")
     print(result)
 
 # --------------- блок загрузки валют биржи Poloniex --------------------------------------------------------------
