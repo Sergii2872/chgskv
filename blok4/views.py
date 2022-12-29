@@ -39,7 +39,7 @@ from celery_progress.backend import ProgressRecorder # pip install celery-progre
 def telegram_message():
     print("обработка сообщений телеграмм")
     os.system("cd /home/zipper")   # директория сервера пользователь
-    result = os.system("./venv/activate") # активируем среду джанго
+    result = os.system("venv/bin/activate") # активируем среду джанго
     print(result)
     os.system("cd /home/zipper/chgskv")  # переходим в директорию проекта
     os.system("python3.8 manage.py sitemessage_send_scheduled") # запускаем обработчик сообщений боту телеграмм
