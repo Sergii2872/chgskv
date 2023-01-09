@@ -42,11 +42,7 @@ from sitemessage.toolbox import send_scheduled_messages
 @shared_task
 def telegram_message():
     print("обработка сообщений телеграмм")
-    send_scheduled_messages(ignore_unknown_messengers=True, ignore_unknown_message_types=True)
-    #os.system("cd /home/zipper")   # директория сервера пользователь
-    #result = os.system("./venv/bin/activate") # активируем среду джанго
-    #print(result)
-    #os.system("cd /home/zipper/chgskv")  # переходим в директорию проекта
+    send_scheduled_messages(ignore_unknown_messengers=True, ignore_unknown_message_types=True) # отправка сообщений боту телеграмм(напрямую из представления без python manage.py sitemessage_send_scheduled)
     #os.system("./manage.py sitemessage_send_scheduled") # запускаем обработчик сообщений боту телеграмм
 
 
