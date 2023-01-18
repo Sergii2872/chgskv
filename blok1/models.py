@@ -36,7 +36,7 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         if not instance.profile.active:
             try:
                 subject = 'Активация учетной записи Chgskv.com'
-                msg = 'Добрый день! Для активации регистрации перейдите по этой ссылке: http://127.0.0.1:8000%s' % reverse('Verify', kwargs={'uuid': str(instance.profile.verification_uuid)})
+                msg = 'Добрый день! Для активации регистрации перейдите по этой ссылке: https://zobmen.top%s' % reverse('Verify', kwargs={'uuid': str(instance.profile.verification_uuid)}) # локально по этой ссылке: http://127.0.0.1:8000%s'
                 send_mail(
                     subject,
                     msg,
