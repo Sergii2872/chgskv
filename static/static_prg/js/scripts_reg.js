@@ -222,9 +222,9 @@ jQuery(function($){
                  console.log(data); /* отображение в консоли логина пользователя */
                  if (data){
                     if (data.vreg == '1' || data.vreg == '3'){
-                       /* location.reload(); /* если пользователь логинится,регистрируется или выходит то перегружаем страницу */
+                       location.reload(); /* если пользователь логинится,регистрируется или выходит то перегружаем страницу */
                        //window.location.replace("http://"+location.host); /* перегружаем домашнюю страницу */
-                       window.location.replace("https://"+location.host); /* перегружаем домашнюю страницу */
+                       //window.location.replace("https://"+location.host); /* перегружаем домашнюю страницу */
 
                     }
                     else{  /* вызываем выпадающее окно из wind_pop.js, передаем id="box  boxN" для info.html */
