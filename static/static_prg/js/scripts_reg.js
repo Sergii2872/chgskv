@@ -224,6 +224,7 @@ jQuery(function($){
                     if (data.vreg == '1' || data.vreg == '3'){
                        //location.reload(); /* если пользователь логинится,регистрируется или выходит то перегружаем страницу */
                        //window.location.replace("http://"+location.host); /* перегружаем домашнюю страницу */
+                       console.log(location.host);
                        window.location.replace("https://"+location.host); /* перегружаем домашнюю страницу */
 
                     }
