@@ -223,7 +223,8 @@ jQuery(function($){
                  if (data){
                     if (data.vreg == '1' || data.vreg == '3'){
                        /* location.reload(); /* если пользователь логинится,регистрируется или выходит то перегружаем страницу */
-                       window.location.replace("http://"+location.host); /* перегружаем домашнюю страницу */
+                       //window.location.replace("http://"+location.host); /* перегружаем домашнюю страницу */
+                       window.location.replace(location.host); /* перегружаем домашнюю страницу */
 
                     }
                     else{  /* вызываем выпадающее окно из wind_pop.js, передаем id="box  boxN" для info.html */
