@@ -129,7 +129,7 @@ $(document).ready(function(){  /* Стандартная обертка, т.е. 
                         $.alert('Пароль успешно изменен!');
                         //popup('#box6');
                         //window.location.replace("http://"+location.host+"/Kabinet"); /* перегружаем страницу кабинета*/
-                        window.location.replace(location.host+"/Kabinet"); /* перегружаем страницу кабинета*/
+                        window.location.replace("https://"+location.host+"/Kabinet"); /* перегружаем страницу кабинета*/
                      }
                      if (data.vizm == '1'){
                         //popup('#box7');
