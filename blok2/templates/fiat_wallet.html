@@ -18,7 +18,7 @@
 {% endblock menu_kab %}
 
 {% block content %}
-
+{% if user.is_superuser == 1 %}
 <div class="container">
     <div class="jumbotron">
         <h3 class="text-center">Справочник счетов фиатных валют</h3>
@@ -132,7 +132,7 @@
     </div>
 
 </div>
-
+{% endif %}
 
 {% endblock %}
 

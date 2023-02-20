@@ -17,7 +17,7 @@ from django.urls import path, include, re_path
 from blok4 import views
 
 urlpatterns = [
-    re_path('main/', views.main, name='main'),
+    #re_path('main/', views.main, name='main'),
     re_path('Load_Poloniex_NameCurrency/', views.Load_Poloniex_NameCurrency, name='Load_Poloniex_NameCurrency'),
     re_path('Load_Poloniex_Currencies/', views.Load_Poloniex_Currencies, name='Load_Poloniex_Currencies'),
     #re_path('Load_Poloniex_PairCurrency/', views.Load_Poloniex_PairCurrency, name='Load_Poloniex_PairCurrency'), не использую так как изменилась логика курсов валют

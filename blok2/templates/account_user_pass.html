@@ -10,6 +10,7 @@
 {% else %}
    {% include 'navbar_kab.html' %} <!-- Меню пользователя -->
 {% endif %}
+{% if user.is_authenticated %}
    <div class="container section-top">
         <div class="row">
              <div class="col-md-10 col-lg-offset-1"> <!-- количество колонок-->
@@ -49,9 +50,6 @@
              </div>
         </div>
     </div>
-
-
-
-
+{% endif %}
 {% endblock %}
 

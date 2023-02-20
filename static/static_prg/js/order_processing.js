@@ -52,8 +52,8 @@ $(document).ready(function() {
                     scrollCollapse: true,
                     paging:         true,
                     fixedColumns:   {
-                        left: 1,
-                        right: 2
+                        left: 0,
+                        right: 1
                     },
                     'columnDefs': [
                     {'targets': [14],

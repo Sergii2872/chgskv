@@ -2,6 +2,7 @@
 <!-- Меню на jQuery https://www.internet-technologies.ru/articles/obzor-30-luchshih-besplatnyh-jquery-menyu-navigacii.html
  https://github.com/vadikom/smartmenus
  http://vadikom.github.io/smartmenus/src/demo/ -->
+{% if user.is_authenticated %}
 <nav role="navigation">
 	<ul id="main-menu" class="sm sm-blue">
 		<li><a href="/">Главная</a></li>
@@ -10,7 +11,7 @@
         <li><a href="{% url 'Account_user_pass' %}">Изменить пароль</a></li>
 	</ul>
 </nav>
-
+{% endif %}
 
 <!-- Static navbar  Меню сайта из getbootstrap.com
   <div class="container-fluid">

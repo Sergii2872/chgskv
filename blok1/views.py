@@ -12,7 +12,14 @@ import json
 from django.utils.timezone import localtime
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
+
+# для django3
 from django.utils.encoding import smart_text
+# для django4
+#import django
+#from django.utils.encoding import smart_str
+#django.utils.encoding.smart_text = smart_str
+
 import re
 from .models import Profile, Site_maintenance
 #from django.core.mail import send_mail

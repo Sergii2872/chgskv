@@ -5,6 +5,7 @@
 
 
 {% block content %}
+{% if user.is_superuser == 1 %}
     {% include 'navbar.html' %}
     <div class="section-top"> <!--  class="section-top" стили в style.css  -->
         <div class="container-fluid img-responsive img-rounded fon4"> <!-- fon картинка фона для блока в style.css -->
@@ -99,5 +100,5 @@
             </div>
         </div>
     </div>
-
+{% endif %}
 {% endblock %}
