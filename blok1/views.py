@@ -155,7 +155,7 @@ def Home(request):
     # полный список(queryset) резервов валют
     balance_currences = Balance_Currency.objects.filter(is_active=True)
     # задаем начальный список поокупаемых валют id__in=all_currencys_by_list
-    name_currences_purchases = Name_Currency.objects.filter(is_active=True, id__in=all_currencys_by_list)
+    name_currences_purchases = Name_Currency.objects.filter(is_active=True, id__in=all_currencys_by_list).order_by("id")
     # задаем начальный список продаваемых валют соответствующий первой покупаемой валюте name_currency_id=all_currencys_by_list[0]
     # из словаря соответствий name_currency_sale_id__in=all_currency_trading_dict[all_currencys_by_list[1]]
     # __gt=0 - больше 0 , __lt=0 - меньше 0, __gte=0 - больше или равно 0
