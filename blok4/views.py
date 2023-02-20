@@ -365,8 +365,11 @@ def my_task_kurs(self, seconds):
                 max_buy = 0
                 min_sell = 0
                 max_sell = 0
-            if value["high24hr"] < 1 and value["high24hr"] != 0:
+            if value["high24hr"] < 1 and value["high24hr"] != 0 and currency_buy != 'BTC':
                 min_buy = 500
+                max_buy = 100000
+            else:
+                min_buy = 0.1
                 max_buy = 100000
             if value["high24hr"] >= 1 and value["high24hr"] < 1000:
                 min_buy = 500
