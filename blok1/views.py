@@ -868,10 +868,11 @@ def Exchange_currency_bid(request, currency_by_id, currency_sell_id):
                                      is_active=True)
             
         # отправляем сообщение о заявке в телеграмм
-        # Ставим сообщение в очередь.
+        # Ставим сообщение в очередь.(blok4\views.py def telegram_message)
         # узнать свой id , в телеграмм набрать get my id, затем /start
         # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
         # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
+        # в админке настраиваем Periodic tasks
         if market == 3:
             schedule_messages('Новая заявка на обмен! Id = ' + str(request_id.pk) + ' Email: ' + email +
                               ' Отдает: ' + str(sum_currency_by) + ' ' + currence_by["currency"] +

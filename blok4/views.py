@@ -163,6 +163,18 @@ def my_task(self, seconds):
     return_dict["result_active_currency_poloniex"] = result_active_currency_poloniex
     return_dict["result_delete_currency_poloniex"] = result_delete_currency_poloniex
 
+    # отправляем сообщение о заявке в телеграмм
+    # Ставим сообщение в очередь.
+    # узнать свой id , в телеграмм набрать get my id, затем /start
+    # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
+    # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
+    # в админке настраиваем Periodic tasks
+    schedule_messages('Справочник валют Poloniex обновлен! ' + datetime.strftime("%B %d, %Y") +
+                      ' Новых криптовалют: ' + str(result_add_currency_poloniex) +
+                      ' Вновь активировано криптовалют: ' + str(result_active_currency_poloniex) +
+                      ' Удалено криптовалют: ' + str(esult_delete_currency_poloniex)
+                      , recipients('telegram', '1156354914'))
+
     return return_dict
 
 
@@ -454,6 +466,20 @@ def my_task_kurs(self, seconds):
     return_dict["result_edit_balancecurrency_poloniex"] = result_edit_balancecurrency_poloniex
 
 
+    # отправляем сообщение о заявке в телеграмм
+    # Ставим сообщение в очередь.
+    # узнать свой id , в телеграмм набрать get my id, затем /start
+    # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
+    # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
+    # в админке настраиваем Periodic tasks
+    schedule_messages('Справочник курсов и остатков валют Poloniex обновлен! ' + datetime.strftime("%B %d, %Y") +
+                      ' Обновленных пар курсов криптовалют: ' + str(result_edit_kurscurrency_poloniex) +
+                      ' Добавлено пар курсов криптовалют: ' + str(result_add_kurscurrency_poloniex) +
+                      ' Деактивировано пар курсов криптовалют: ' + str(result_delete_kurscurrency_poloniex) +
+                      ' Обновленных остатков(резерва) криптовалют: ' + str(result_edit_balancecurrency_poloniex) +
+                      ' Добавлено остатков(резерва) криптовалют: ' + str(result_add_balancecurrency_poloniex)
+                      , recipients('telegram', '1156354914'))
+
     return return_dict
 
 
@@ -531,7 +557,15 @@ def my_task_synchron(self, seconds):
 
     return_dict["result_delete_synchroncurrency_poloniex"] = result_delete_synchroncurrency_poloniex
 
-
+    # отправляем сообщение о заявке в телеграмм
+    # Ставим сообщение в очередь.
+    # узнать свой id , в телеграмм набрать get my id, затем /start
+    # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
+    # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
+    # в админке настраиваем Periodic tasks
+    schedule_messages('Справочник пар курсов и остатка(обьема) криптовалют синхронизирован со списком пар биржи Poloniex! ' + datetime.strftime("%B %d, %Y") +
+                      ' Деактивировано пар курсов криптовалют: ' + str(result_delete_synchroncurrency_poloniex)
+                      , recipients('telegram', '1156354914'))
 
     return return_dict
 
