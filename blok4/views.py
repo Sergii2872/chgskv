@@ -35,6 +35,20 @@ from celery_progress.backend import ProgressRecorder # pip install celery-progre
 # https://django-sitemessage.readthedocs.io/en/stable/toolbox.html
 from sitemessage.toolbox import send_scheduled_messages
 
+# Telegram сообщения
+# Пакет https://pypi.org/project/django-sitemessage/
+# pip install django-sitemessage
+# добавляем приложение sitemessage application to INSTALLED_APPS in your settings file ‘settings.py’
+# создаем таблицы БД приложения python manage.py migrate
+# отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
+from sitemessage.toolbox import register_messenger_objects, schedule_messages, recipients
+from sitemessage.messengers.telegram import TelegramMessenger
+# Конфигурируем посыльного Telegram.
+# `bot_token` - это токен, полученный при создании телеграм-бота.(задаем в settings.py)
+# https://pythonz.net/articles/48/
+# https://django-sitemessage.readthedocs.io/en/latest/quickstart.html
+register_messenger_objects(TelegramMessenger(settings.BOT_TOKEN))
+
 
 # Create your views here.
 
@@ -170,9 +184,9 @@ def my_task(self, seconds):
     # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
     # в админке настраиваем Periodic tasks
     schedule_messages('Справочник валют Poloniex обновлен! ' +
-                      ' Новых криптовалют: ' + result_add_currency_poloniex +
-                      ' Вновь активировано криптовалют: ' + result_active_currency_poloniex +
-                      ' Удалено криптовалют: ' + result_delete_currency_poloniex
+                      ' Новых криптовалют: ' + str(result_add_currency_poloniex) +
+                      ' Вновь активировано криптовалют: ' + str(result_active_currency_poloniex) +
+                      ' Удалено криптовалют: ' + str(result_delete_currency_poloniex)
                       , recipients('telegram', '1156354914'))
 
     return return_dict
