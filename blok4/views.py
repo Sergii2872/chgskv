@@ -183,7 +183,7 @@ def my_task(self, seconds):
     # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
     # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
     # в админке настраиваем Periodic tasks
-    schedule_messages('Справочник валют Poloniex обновлен! ' +
+    schedule_messages('Справочник валют Poloniex обновлен! ' + datetime.strftime("%B %d, %Y") +
                       ' Новых криптовалют: ' + str(result_add_currency_poloniex) +
                       ' Вновь активировано криптовалют: ' + str(result_active_currency_poloniex) +
                       ' Удалено криптовалют: ' + str(result_delete_currency_poloniex)
