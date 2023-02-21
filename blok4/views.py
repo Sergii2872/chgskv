@@ -169,7 +169,7 @@ def my_task(self, seconds):
     # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
     # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
     # в админке настраиваем Periodic tasks
-    schedule_messages('Справочник валют Poloniex обновлен! ' + datetime +
+    schedule_messages('Справочник валют Poloniex обновлен! ' + 
                       ' Новых криптовалют: ' + str(result_add_currency_poloniex) +
                       ' Вновь активировано криптовалют: ' + str(result_active_currency_poloniex) +
                       ' Удалено криптовалют: ' + str(esult_delete_currency_poloniex)
@@ -472,7 +472,7 @@ def my_task_kurs(self, seconds):
     # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
     # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
     # в админке настраиваем Periodic tasks
-    schedule_messages('Справочник курсов и остатков валют Poloniex обновлен! ' + datetime +
+    schedule_messages('Справочник курсов и остатков валют Poloniex обновлен! ' +
                       ' Обновленных пар курсов криптовалют: ' + str(result_edit_kurscurrency_poloniex) +
                       ' Добавлено пар курсов криптовалют: ' + str(result_add_kurscurrency_poloniex) +
                       ' Деактивировано пар курсов криптовалют: ' + str(result_delete_kurscurrency_poloniex) +
@@ -563,7 +563,7 @@ def my_task_synchron(self, seconds):
     # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
     # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
     # в админке настраиваем Periodic tasks
-    schedule_messages('Справочник пар курсов и остатка(обьема) криптовалют синхронизирован со списком пар биржи Poloniex! ' + datetime +
+    schedule_messages('Справочник пар курсов и остатка(обьема) криптовалют синхронизирован со списком пар биржи Poloniex! ' +
                       ' Деактивировано пар курсов криптовалют: ' + str(result_delete_synchroncurrency_poloniex)
                       , recipients('telegram', '1156354914'))
 
