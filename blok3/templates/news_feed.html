@@ -12,6 +12,7 @@
                         Новости
                 </h1>
                     {% for news_feed in news_feeds %}
+                       <div class="row">
                         <div class="col-md-1">
                             <h5>{{ news_feed.updated }}</h5>
                         </div>
@@ -47,9 +48,8 @@
                                     </div>
                                 </section>
                             </div>
-                        <br><br><br><br><br><br>
                         </div>
-                        <br><br><br><br><br><br>
+                       </div>
                     {% endfor %}
             </div>
         </div>
