@@ -59,7 +59,9 @@ def telegram_message():
     send_scheduled_messages(ignore_unknown_messengers=True, ignore_unknown_message_types=True) # отправка сообщений боту телеграмм(напрямую из представления без python manage.py sitemessage_send_scheduled)
     #os.system("./manage.py sitemessage_send_scheduled") # запускаем обработчик сообщений боту телеграмм
 
+
 # --------------- Загрузка валют биржи Poloniex для запуска периодической задачи в пакете периодических задач(https://pypi.org/project/django-celery-beat/)
+# настраивается в админке Periodic tasks
 @shared_task
 def my_task_currency_periodic():
     i = 0  # индикатор
@@ -126,9 +128,6 @@ def my_task_currency_periodic():
 
         i = 0  # для следующей итерации устанавливаем индикатор в 0
 
-    return_dict["result_add_currency_poloniex"] = result_add_currency_poloniex
-    return_dict["result_active_currency_poloniex"] = result_active_currency_poloniex
-    return_dict["result_delete_currency_poloniex"] = result_delete_currency_poloniex
 
     # отправляем сообщение о заявке в телеграмм
     # Ставим сообщение в очередь.
@@ -141,6 +140,167 @@ def my_task_currency_periodic():
                       ' Вновь активировано криптовалют: ' + str(result_active_currency_poloniex) +
                       ' Удалено криптовалют: ' + str(result_delete_currency_poloniex)
                       , recipients('telegram', '1156354914'))
+
+
+# --------------- Загрузка курсов и остатка(обьема) валют биржи Poloniex для запуска периодической задачи в пакете периодических задач(https://pypi.org/project/django-celery-beat/)
+# настраивается в админке Periodic tasks
+@shared_task
+def my_task_currency_kurs_periodic():
+    i = 0  # индикатор
+    result_add_kurscurrency_poloniex = 0  # переменная результат добавленных новых курсов пары валют
+    result_edit_kurscurrency_poloniex = 0  # переменная результат обновленных курсов которые уже есть в БД курсов пары валют
+    result_delete_kurscurrency_poloniex = 0  # переменная результат деактивации курсов пары валют
+    result_add_balancecurrency_poloniex = 0  # переменная результат добавленных новых остатков(резерв) валют
+    result_edit_balancecurrency_poloniex = 0  # переменная результат обновленных остатков(резерв) которые уже есть в БД
+    min_buy = 0
+    max_buy = 0
+    min_sell = 0
+    max_sell = 0
+    return_dict = dict()  # переменную return_dict определяем как словарь
+    # валюты
+    polo = Poloniex()  # API биржи Poloniex
+    currencies_kurs = polo.returnTicker()  # получаем словарь котировок курсов криптовалют с биржи Poloniex
+    prices_currencys = Prices_Currency.objects.all()  # валюты справочника курсов валют
+    for key, value in currencies_kurs.items():  # проходим по полученному словарю пар котировок криптовалют Poloniex
+        if value["isFrozen"] == 0:  # если валюная пара торгуется в настоящее время на бирже
+            # currency_pair = Name_Currency_Trading.objects.get(id_pair_market=value["id"], is_active=True) # находим запись в справочнике пар валют по id пары равной id пары торговой площадки Poloniex
+            currency_buy = key[:key.find('_')]  # покупаем у клиента валюту
+            currency_sell = key[key.find('_') - len(key) + 1:]  # продаем клиенту валюту
+            print("poloniex buy ", currency_buy)
+            print("poloniex sell ", currency_sell)
+            name_currency_buy = Name_Currency.objects.get(symbol=currency_buy, is_active=True)  # находим запись в справочнике валют по символу равному символу покупаемой у клиента валюты
+            name_currency_sell = Name_Currency.objects.get(symbol=currency_sell, is_active=True)  # находим запись в справочнике валют по символу равному символу продаваемой клиенту валюты
+            # определяем границы минимумов и максимумов покупки продажи
+            if value["high24hr"] == 0:
+                min_buy = 0
+                max_buy = 0
+                min_sell = 0
+                max_sell = 0
+            if value["high24hr"] < 1 and value["high24hr"] != 0 and currency_buy != 'BTC':
+                min_buy = 500
+                max_buy = 100000
+            else:
+                min_buy = 0.1
+                max_buy = 100000
+            if value["high24hr"] >= 1 and value["high24hr"] < 1000:
+                min_buy = 500
+                max_buy = 100000
+            if value["high24hr"] >= 1000:
+                min_buy = 300
+                max_buy = 100000
+            if value["high24hr"] != 0:
+                min_sell = min_buy / value["high24hr"]
+                max_sell = max_buy / value["high24hr"]
+
+            for prices_currency in prices_currencys:  # проходим по нашему справочнику курсов валют
+                # если id пары биржи Poloniex равно id пары в справочнике курсов пар валют и эта пара активна и эта пара принадлежит площадке(бирже) Poloniex(market_exchange_id=1)
+                if value["id"] == prices_currency.id_pair_market and prices_currency.is_active == True and prices_currency.market_exchange_id == 1:
+                    # и id покупаемой валюты в справочнике курсов пар валют равно id покупаемой валюты биржи Poloniex
+                    # и id продаваемой валюты в справочнике курсов пар валют равно id продаваемой валюты биржи Poloniex
+                    if name_currency_buy.id == prices_currency.name_currency_id and name_currency_sell.id == prices_currency.name_currency_sale_id:
+                        # обновляем курсы и обновляем дату курса, перезаписываем значение полей
+                        prices_currency.kurs_sell = Decimal(format(float(value["high24hr"] + value["high24hr"] * 0.05), '.8f'))
+                        prices_currency.min_buy = min_buy
+                        prices_currency.max_buy = max_buy
+                        prices_currency.min_sell = min_sell
+                        prices_currency.max_sell = max_sell
+                        prices_currency.updated = datetime
+                        prices_currency.save()
+                        i = 1  # такая валюта есть то устанавливаем индикатор в 1  celery -A chgskv worker -l info -P gevent
+                        result_edit_kurscurrency_poloniex += 1
+                    else:
+                        prices_currency.is_active = False
+                        prices_currency.updated = datetime
+                        prices_currency.save()
+                        result_delete_kurscurrency_poloniex += 1
+
+            if i == 0:
+                price_currency = Prices_Currency.objects.create(name_currency_id=name_currency_buy.id,
+                                                                name_currency_sale_id=name_currency_sell.id,
+                                                                name_currency_sale_currency=name_currency_sell.currency,
+                                                                kurs_sell=Decimal(format(
+                                                                    float(value["high24hr"] + value["high24hr"] * 0.05), '.8f')),
+                                                                min_buy=min_buy,
+                                                                max_buy=max_buy,
+                                                                id_pair_market=value["id"],
+                                                                market_exchange_id=1,
+                                                                is_active=True, created=datetime, updated=datetime)
+                result_add_kurscurrency_poloniex += 1
+            i = 0  # для следующей итерации устанавливаем индикатор в 0
+            balance_currencys = Balance_Currency.objects.all()  # валюты справочника остатков(резерв) валют
+            for balance_currency in balance_currencys:  # проходим по нашему справочнику остатков(резерв) валют
+                # если id валюты в справочнике остатков валют равно id продаваемой валюты в справочнике пар валют и эта валюта активна и текущая сумма меньше суммы обьема
+                # if balance_currency.name_currency_id == prices_currencys.name_currency_sale_id and balance_currency.is_active == True and balance_currency.balance_amount < format(float(value["quoteVolume"]), '.8f'):
+                # если id валюты в справочнике остатков валют равно id продаваемой валюты в справочнике наименования валют и эта валюта активна и текущая сумма меньше суммы обьема
+                if balance_currency.name_currency_id == name_currency_sell.id and balance_currency.is_active == True:
+                    if balance_currency.balance_amount < Decimal(format(float(value["quoteVolume"]), '.8f')):
+                        # balance_currency = Balance_Currency.objects.get(name_currency_id=currency_pair.name_currency_sale_id, is_active=True)  # находим запись по id валюты равной id продаваемой валюты справочника пар валют
+                        # обновляем остаток(резерв) перезаписываем значение полей
+                        balance_currency.balance_amount = Decimal(format(float(value["quoteVolume"]), '.8f'))  # quoteVolume - обьем котировки биржи Poloniex за последние 24 часа
+                        balance_currency.updated = datetime
+                        balance_currency.save()
+                        result_edit_balancecurrency_poloniex += 1
+                    i = 1  # такая валюта есть то устанавливаем индикатор в 1
+            if i == 0:
+                balance_currency = Balance_Currency.objects.create(name_currency_id=name_currency_sell.id,
+                                                                   balance_amount=Decimal(format(float(value["quoteVolume"]), '.8f')),
+                                                                   is_active=True, created=datetime, updated=datetime)
+                result_add_balancecurrency_poloniex += 1
+
+        i = 0  # для следующей итерации устанавливаем индикатор в 0
+
+
+    # отправляем сообщение о заявке в телеграмм
+    # Ставим сообщение в очередь.
+    # узнать свой id , в телеграмм набрать get my id, затем /start
+    # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
+    # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
+    # в админке настраиваем Periodic tasks
+    schedule_messages('Справочник курсов и остатков валют Poloniex обновлен! ' +
+                      ' Обновленных пар курсов криптовалют: ' + str(result_edit_kurscurrency_poloniex) +
+                      ' Добавлено пар курсов криптовалют: ' + str(result_add_kurscurrency_poloniex) +
+                      ' Деактивировано пар курсов криптовалют: ' + str(result_delete_kurscurrency_poloniex) +
+                      ' Обновленных остатков(резерва) криптовалют: ' + str(result_edit_balancecurrency_poloniex) +
+                      ' Добавлено остатков(резерва) криптовалют: ' + str(result_add_balancecurrency_poloniex)
+                      , recipients('telegram', '1156354914'))
+
+
+# --------------- Синхронизация пар валют биржи Poloniex для запуска периодической задачи в пакете периодических задач(https://pypi.org/project/django-celery-beat/)
+# настраивается в админке Periodic tasks
+@shared_task
+def my_task_currency_synchron_periodic():
+    result_delete_synchroncurrency_poloniex = 0  # переменная результат деактивации курсов пары валют
+    return_dict = dict()  # переменную return_dict определяем как словарь
+    # валюты
+    polo = Poloniex()  # API биржи Poloniex
+    currencies_kurs = polo.returnTicker()  # получаем словарь котировок курсов криптовалют с биржи Poloniex
+    prices_currencys = Prices_Currency.objects.all()  # валюты справочника курсов валют
+    count_progressbar = Prices_Currency.objects.count()  # количество элементов в queryset
+    # деактивируем пары в справочнике курсов валют которых нет уже в словаре пар котировок криптовалют Poloniex
+    for prices_currency in prices_currencys:  # проходим по нашему справочнику курсов валют
+        k = 0  # индикатор
+        for key, value in currencies_kurs.items():  # проходим по полученному словарю пар котировок криптовалют Poloniex
+            # если валюная пара торгуется в настоящее время на бирже и если id пары биржи Poloniex равно id пары
+            # в справочнике курсов пар валют и эта пара активна и эта пара принадлежит площадке(бирже) Poloniex(market_exchange_id=1)
+            if value["isFrozen"] == 0 and value["id"] == prices_currency.id_pair_market and prices_currency.is_active == True and prices_currency.market_exchange_id == 1:
+                k = 1  # если такая пара есть в актуальном словаре Poloniex
+                # если такой пары уже нет в актуальном словаре Poloniex и эта пара принадлежит Poloniex(в справочнике бирж под 1)
+        if k == 0 and prices_currency.is_active == True and prices_currency.market_exchange_id == 1:
+            prices_currency.is_active = False
+            prices_currency.updated = datetime
+            prices_currency.save()
+            result_delete_synchroncurrency_poloniex += 1
+
+
+    # отправляем сообщение о заявке в телеграмм
+    # Ставим сообщение в очередь.
+    # узнать свой id , в телеграмм набрать get my id, затем /start
+    # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
+    # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
+    # в админке настраиваем Periodic tasks
+    schedule_messages('Справочник пар курсов и остатка(обьема) криптовалют синхронизирован со списком пар биржи Poloniex! ' +
+        ' Деактивировано пар курсов криптовалют: ' + str(result_delete_synchroncurrency_poloniex)
+        , recipients('telegram', '1156354914'))
 
 
 
