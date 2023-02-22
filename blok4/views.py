@@ -59,6 +59,90 @@ def telegram_message():
     send_scheduled_messages(ignore_unknown_messengers=True, ignore_unknown_message_types=True) # отправка сообщений боту телеграмм(напрямую из представления без python manage.py sitemessage_send_scheduled)
     #os.system("./manage.py sitemessage_send_scheduled") # запускаем обработчик сообщений боту телеграмм
 
+# --------------- Загрузка валют биржи Poloniex для запуска периодической задачи в пакете периодических задач(https://pypi.org/project/django-celery-beat/)
+@shared_task
+def my_task_currency_periodic():
+    i = 0  # индикатор
+    result_add_currency_poloniex = 0  # переменная результат добавленных новых валют
+    result_active_currency_poloniex = 0  # переменная результат активированных которые уже есть в БД валют
+    result_delete_currency_poloniex = 0  # переменная результат удаленных валют из БД (на Poloniex больше не торгуются)
+    return_dict = dict()  # переменную return_dict определяем как словарь
+    # валюты
+    #  # API биржи Poloniex
+    # help(polo)
+    # api ключи Poloniex в settings.py
+    api_key = settings.POLONIEX_API_KEY
+    api_secret = settings.POLONIEX_SECRET
+    polo = Poloniex(api_key, api_secret)
+    # polo = Poloniex()
+    currencies = polo.returnCurrencies()  # получаем словарь криптовалют с биржи Poloniex
+    namecurrences = Name_Currency.objects.all()  # валюты справочника валют
+    for key, value in currencies.items():  # проходим по полученному словарю криптовалют Poloniex
+        if value["delisted"] == 0:  # если валюта не исключена из списка биржи
+            # генерируем адрес кошелька с помощью api Poloniex
+            adres = polo.generateNewAddress(key)
+            if adres["success"] == 0:
+                adres = adres["response"]
+                adres = adres[adres.find(':') - len(adres) + 2:]  # выделяем из строки адрес
+            else:
+                adres = ""
+            for namecurrence in namecurrences:  # проходим по нашему справочнику валют
+                # и если такая валюта(символ) есть и она не активна и совпадают id из биржи и эта валюта принадлежит Poloniex(поле market_exchange_id=1)
+                if key == namecurrence.symbol and namecurrence.is_active == False and value["id"] == namecurrence.id_market and namecurrence.market_exchange_id == 1:
+                    name_currency = Name_Currency.objects.get(
+                        symbol=key)  # находим запись по символу равному символу валюты биржи
+                    # то делаем эту валюту активной и обновляем дату, перезаписываем значение полей
+                    name_currency.is_active = True
+                    name_currency.wallet = adres
+                    name_currency.updated = datetime
+                    name_currency.save()
+                    i = 1  # такая валюта есть то устанавливаем индикатор в 1
+                    result_active_currency_poloniex += 1
+                # если такая валюта(символ) есть и она активна и совпадают id из биржи и эта валюта принадлежит Poloniex(поле market_exchange_id=1)
+                if key == namecurrence.symbol and namecurrence.is_active == True and value["id"] == namecurrence.id_market and namecurrence.market_exchange_id == 1:
+                    i = 1  # такая валюта есть то устанавливаем индикатор в 1
+            if i == 0:
+                # market_exchange_id=1, где 1 это id биржи Poloniex в БД площадок(бирж)(при заполнении справочника под id=1 обязательно пишем Poloniex!!!)
+                name_currency = Name_Currency.objects.create(market_exchange_id=1, id_market=value["id"],
+                                                             currency=value["name"], symbol=key,
+                                                             image_currency="image_currency/noimage.png",
+                                                             # ставим иконку начальную чтоб не было ошибки пустого поля
+                                                             wallet=adres, is_active=True,
+                                                             # wallet=value["depositAddress"] заменил на генерацию адреса депозита
+                                                             created=datetime, updated=datetime)
+                result_add_currency_poloniex += 1
+
+        if value["delisted"] == 1:  # если валюта исключена из списка биржи
+            for namecurrence in namecurrences:  # проходим по нашему справочнику валют
+                # если такая валюта(символ) есть и она активна и совпадают id из биржи и эта валюта принадлежит Poloniex(поле market_exchange_id=1)
+                if key == namecurrence.symbol and namecurrence.is_active == True and value["id"] == namecurrence.id_market and namecurrence.market_exchange_id == 1:
+                    print("такая валюта есть и она активна, то делаем ее не активной")
+                    name_currency = Name_Currency.objects.get(symbol=key)  # находим запись по символу равному символу валюты биржи
+                    # то делаем эту валюту не активной и обновляем дату, перезаписываем значения
+                    name_currency.is_active = False
+                    name_currency.updated = datetime
+                    name_currency.save()
+                    result_delete_currency_poloniex += 1
+
+        i = 0  # для следующей итерации устанавливаем индикатор в 0
+
+    return_dict["result_add_currency_poloniex"] = result_add_currency_poloniex
+    return_dict["result_active_currency_poloniex"] = result_active_currency_poloniex
+    return_dict["result_delete_currency_poloniex"] = result_delete_currency_poloniex
+
+    # отправляем сообщение о заявке в телеграмм
+    # Ставим сообщение в очередь.
+    # узнать свой id , в телеграмм набрать get my id, затем /start
+    # Оно будет отослано моему боту в переписку (чат) с ID 1156354914.
+    # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
+    # в админке настраиваем Periodic tasks
+    schedule_messages('Справочник валют Poloniex обновлен! ' +
+                      ' Новых криптовалют: ' + str(result_add_currency_poloniex) +
+                      ' Вновь активировано криптовалют: ' + str(result_active_currency_poloniex) +
+                      ' Удалено криптовалют: ' + str(result_delete_currency_poloniex)
+                      , recipients('telegram', '1156354914'))
+
+
 
 
 # --------------- блок загрузки валют биржи Poloniex --------------------------------------------------------------
