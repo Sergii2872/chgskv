@@ -138,8 +138,7 @@ def my_task_currency_periodic():
     schedule_messages('Справочник валют Poloniex обновлен! ' +
                       ' Новых криптовалют: ' + str(result_add_currency_poloniex) +
                       ' Вновь активировано криптовалют: ' + str(result_active_currency_poloniex) +
-                      ' Удалено криптовалют: ' + str(result_delete_currency_poloniex)
-                      , recipients('telegram', '1156354914'))
+                      ' Удалено криптовалют: ' + str(result_delete_currency_poloniex), recipients('telegram', '1156354914'))
 
 
 # --------------- Загрузка курсов и остатка(обьема) валют биржи Poloniex для запуска периодической задачи в пакете периодических задач(https://pypi.org/project/django-celery-beat/)
@@ -156,7 +155,6 @@ def my_task_currency_kurs_periodic():
     max_buy = 0
     min_sell = 0
     max_sell = 0
-    return_dict = dict()  # переменную return_dict определяем как словарь
     # валюты
     polo = Poloniex()  # API биржи Poloniex
     currencies_kurs = polo.returnTicker()  # получаем словарь котировок курсов криптовалют с биржи Poloniex
@@ -218,8 +216,7 @@ def my_task_currency_kurs_periodic():
                 price_currency = Prices_Currency.objects.create(name_currency_id=name_currency_buy.id,
                                                                 name_currency_sale_id=name_currency_sell.id,
                                                                 name_currency_sale_currency=name_currency_sell.currency,
-                                                                kurs_sell=Decimal(format(
-                                                                    float(value["high24hr"] + value["high24hr"] * 0.05), '.8f')),
+                                                                kurs_sell=Decimal(format(float(value["high24hr"] + value["high24hr"] * 0.05), '.8f')),
                                                                 min_buy=min_buy,
                                                                 max_buy=max_buy,
                                                                 id_pair_market=value["id"],
@@ -261,8 +258,7 @@ def my_task_currency_kurs_periodic():
                       ' Добавлено пар курсов криптовалют: ' + str(result_add_kurscurrency_poloniex) +
                       ' Деактивировано пар курсов криптовалют: ' + str(result_delete_kurscurrency_poloniex) +
                       ' Обновленных остатков(резерва) криптовалют: ' + str(result_edit_balancecurrency_poloniex) +
-                      ' Добавлено остатков(резерва) криптовалют: ' + str(result_add_balancecurrency_poloniex)
-                      , recipients('telegram', '1156354914'))
+                      ' Добавлено остатков(резерва) криптовалют: ' + str(result_add_balancecurrency_poloniex), recipients('telegram', '1156354914'))
 
 
 # --------------- Синхронизация пар валют биржи Poloniex для запуска периодической задачи в пакете периодических задач(https://pypi.org/project/django-celery-beat/)
@@ -270,12 +266,10 @@ def my_task_currency_kurs_periodic():
 @shared_task
 def my_task_currency_synchron_periodic():
     result_delete_synchroncurrency_poloniex = 0  # переменная результат деактивации курсов пары валют
-    return_dict = dict()  # переменную return_dict определяем как словарь
     # валюты
     polo = Poloniex()  # API биржи Poloniex
     currencies_kurs = polo.returnTicker()  # получаем словарь котировок курсов криптовалют с биржи Poloniex
     prices_currencys = Prices_Currency.objects.all()  # валюты справочника курсов валют
-    count_progressbar = Prices_Currency.objects.count()  # количество элементов в queryset
     # деактивируем пары в справочнике курсов валют которых нет уже в словаре пар котировок криптовалют Poloniex
     for prices_currency in prices_currencys:  # проходим по нашему справочнику курсов валют
         k = 0  # индикатор
@@ -299,8 +293,7 @@ def my_task_currency_synchron_periodic():
     # отправка сообщения python manage.py sitemessage_send_scheduled (периодически запускать в cron, celery или др. обработчике)
     # в админке настраиваем Periodic tasks
     schedule_messages('Справочник пар курсов и остатка(обьема) криптовалют синхронизирован со списком пар биржи Poloniex! ' +
-        ' Деактивировано пар курсов криптовалют: ' + str(result_delete_synchroncurrency_poloniex)
-        , recipients('telegram', '1156354914'))
+        ' Деактивировано пар курсов криптовалют: ' + str(result_delete_synchroncurrency_poloniex), recipients('telegram', '1156354914'))
 
 
 
