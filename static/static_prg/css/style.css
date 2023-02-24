@@ -292,11 +292,6 @@ h1 {
 
 /* Контакты */
 
-.nesolestag-enadenud {
-  width: 615px;
-  margin: 0 auto;
-}
-
 .kesednsoled:after,
 .kesednsoled:before {
   content: ".";
