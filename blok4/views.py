@@ -82,12 +82,16 @@ def my_task_currency_periodic():
     for key, value in currencies.items():  # проходим по полученному словарю криптовалют Poloniex
         if value["delisted"] == 0:  # если валюта не исключена из списка биржи
             # генерируем адрес кошелька с помощью api Poloniex
-            adres = polo.generateNewAddress(key)
-            if adres["success"] == 0:
-                adres = adres["response"]
-                adres = adres[adres.find(':') - len(adres) + 2:]  # выделяем из строки адрес
-            else:
-                adres = ""
+            try:
+                adres = polo.generateNewAddress(key)
+                if adres["success"] == 0:
+                    adres = adres["response"]
+                    adres = adres[adres.find(':') - len(adres) + 2:] # выделяем из строки адрес
+                else:
+                    adres = ""
+            except Exception as e:
+                    adres = ""
+
             for namecurrence in namecurrences:  # проходим по нашему справочнику валют
                 # и если такая валюта(символ) есть и она не активна и совпадают id из биржи и эта валюта принадлежит Poloniex(поле market_exchange_id=1)
                 if key == namecurrence.symbol and namecurrence.is_active == False and value["id"] == namecurrence.id_market and namecurrence.market_exchange_id == 1:
@@ -164,8 +168,7 @@ def my_task_currency_kurs_periodic():
             # currency_pair = Name_Currency_Trading.objects.get(id_pair_market=value["id"], is_active=True) # находим запись в справочнике пар валют по id пары равной id пары торговой площадки Poloniex
             currency_buy = key[:key.find('_')]  # покупаем у клиента валюту
             currency_sell = key[key.find('_') - len(key) + 1:]  # продаем клиенту валюту
-            print("poloniex buy ", currency_buy)
-            print("poloniex sell ", currency_sell)
+
             name_currency_buy = Name_Currency.objects.get(symbol=currency_buy, is_active=True)  # находим запись в справочнике валют по символу равному символу покупаемой у клиента валюты
             name_currency_sell = Name_Currency.objects.get(symbol=currency_sell, is_active=True)  # находим запись в справочнике валют по символу равному символу продаваемой клиенту валюты
             # определяем границы минимумов и максимумов покупки продажи
