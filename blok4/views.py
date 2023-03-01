@@ -359,14 +359,19 @@ def my_task(self, seconds):
     for key, value in currencies.items():  # проходим по полученному словарю криптовалют Poloniex
         if value["delisted"] == 0:  # если валюта не исключена из списка биржи
             # генерируем адрес кошелька с помощью api Poloniex
-            adres = polo.generateNewAddress(key)
-            if adres["success"] == 0:
-                adres = adres["response"]
-                adres = adres[adres.find(':') - len(adres) + 2:] # выделяем из строки адрес
-                print(adres)
-            else:
-                adres = ""
-                print(adres)
+            try:
+                adres = polo.generateNewAddress(key)
+                if adres["success"] == 0:
+                    adres = adres["response"]
+                    adres = adres[adres.find(':') - len(adres) + 2:] # выделяем из строки адрес
+                    print(adres)
+                else:
+                    adres = ""
+                    print(adres)
+            except Exception as e:
+                    print("Ошибка генерации адреса криптовалюты: ", e)
+                    adres = ""
+                    print(adres)
             for namecurrence in namecurrences:  # проходим по нашему справочнику валют
                 # и если такая валюта(символ) есть и она не активна и совпадают id из биржи и эта валюта принадлежит Poloniex(поле market_exchange_id=1)
                 if key == namecurrence.symbol and namecurrence.is_active == False and value["id"] == namecurrence.id_market and namecurrence.market_exchange_id == 1:
