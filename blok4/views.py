@@ -81,25 +81,14 @@ def my_task_currency_periodic():
     namecurrences = Name_Currency.objects.all()  # валюты справочника валют
     for key, value in currencies.items():  # проходим по полученному словарю криптовалют Poloniex
         if value["delisted"] == 0:  # если валюта не исключена из списка биржи
-            # генерируем адрес кошелька с помощью api Poloniex
-            try:
-                adres = polo.generateNewAddress(key)
-                if adres["success"] == 0:
-                    adres = adres["response"]
-                    adres = adres[adres.find(':') - len(adres) + 2:] # выделяем из строки адрес
-                else:
-                    adres = ""
-            except Exception as e:
-                    adres = ""
 
             for namecurrence in namecurrences:  # проходим по нашему справочнику валют
                 # и если такая валюта(символ) есть и она не активна и совпадают id из биржи и эта валюта принадлежит Poloniex(поле market_exchange_id=1)
                 if key == namecurrence.symbol and namecurrence.is_active == False and value["id"] == namecurrence.id_market and namecurrence.market_exchange_id == 1:
-                    name_currency = Name_Currency.objects.get(
-                        symbol=key)  # находим запись по символу равному символу валюты биржи
+                    name_currency = Name_Currency.objects.get(symbol=key)  # находим запись по символу равному символу валюты биржи
                     # то делаем эту валюту активной и обновляем дату, перезаписываем значение полей
                     name_currency.is_active = True
-                    name_currency.wallet = adres
+                    # name_currency.wallet = adres        адрес кошелька получаю только когда новая валюта
                     name_currency.updated = datetime
                     name_currency.save()
                     i = 1  # такая валюта есть то устанавливаем индикатор в 1
@@ -108,6 +97,16 @@ def my_task_currency_periodic():
                 if key == namecurrence.symbol and namecurrence.is_active == True and value["id"] == namecurrence.id_market and namecurrence.market_exchange_id == 1:
                     i = 1  # такая валюта есть то устанавливаем индикатор в 1
             if i == 0:
+                # генерируем адрес кошелька с помощью api Poloniex
+                try:
+                    adres = polo.generateNewAddress(key)
+                    if adres["success"] == 0:
+                        adres = adres["response"]
+                        adres = adres[adres.find(':') - len(adres) + 2:]  # выделяем из строки адрес
+                    else:
+                        adres = ""
+                except Exception as e:
+                    adres = ""
                 # market_exchange_id=1, где 1 это id биржи Poloniex в БД площадок(бирж)(при заполнении справочника под id=1 обязательно пишем Poloniex!!!)
                 name_currency = Name_Currency.objects.create(market_exchange_id=1, id_market=value["id"],
                                                              currency=value["name"], symbol=key,
@@ -361,20 +360,7 @@ def my_task(self, seconds):
     namecurrences = Name_Currency.objects.all()  # валюты справочника валют
     for key, value in currencies.items():  # проходим по полученному словарю криптовалют Poloniex
         if value["delisted"] == 0:  # если валюта не исключена из списка биржи
-            # генерируем адрес кошелька с помощью api Poloniex
-            try:
-                adres = polo.generateNewAddress(key)
-                if adres["success"] == 0:
-                    adres = adres["response"]
-                    adres = adres[adres.find(':') - len(adres) + 2:] # выделяем из строки адрес
-                    print(adres)
-                else:
-                    adres = ""
-                    print(adres)
-            except Exception as e:
-                    print("Ошибка генерации адреса криптовалюты: ", e)
-                    adres = ""
-                    print(adres)
+
             for namecurrence in namecurrences:  # проходим по нашему справочнику валют
                 # и если такая валюта(символ) есть и она не активна и совпадают id из биржи и эта валюта принадлежит Poloniex(поле market_exchange_id=1)
                 if key == namecurrence.symbol and namecurrence.is_active == False and value["id"] == namecurrence.id_market and namecurrence.market_exchange_id == 1:
@@ -382,7 +368,7 @@ def my_task(self, seconds):
                     name_currency = Name_Currency.objects.get(symbol=key)  # находим запись по символу равному символу валюты биржи
                     # то делаем эту валюту активной и обновляем дату, перезаписываем значение полей
                     name_currency.is_active = True
-                    name_currency.wallet = adres
+                    # name_currency.wallet = adres   адрес кошелька получаю только когда новая валюта
                     name_currency.updated = datetime
                     name_currency.save()
                     i = 1  # такая валюта есть то устанавливаем индикатор в 1
@@ -393,6 +379,20 @@ def my_task(self, seconds):
                     i = 1  # такая валюта есть то устанавливаем индикатор в 1
             if i == 0:
                 print("такой валюты нет, добавляем ее")
+                # генерируем адрес кошелька с помощью api Poloniex
+                try:
+                    adres = polo.generateNewAddress(key)
+                    if adres["success"] == 0:
+                        adres = adres["response"]
+                        adres = adres[adres.find(':') - len(adres) + 2:]  # выделяем из строки адрес
+                        print(adres)
+                    else:
+                        adres = ""
+                        print(adres)
+                except Exception as e:
+                    print("Ошибка генерации адреса криптовалюты: ", e)
+                    adres = ""
+                    print(adres)
                 # market_exchange_id=1, где 1 это id биржи Poloniex в БД площадок(бирж)(при заполнении справочника под id=1 обязательно пишем Poloniex!!!)
                 name_currency = Name_Currency.objects.create(market_exchange_id=1, id_market=value["id"],
                                                              currency=value["name"], symbol=key,
